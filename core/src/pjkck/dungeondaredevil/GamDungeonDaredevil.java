@@ -22,7 +22,7 @@ public class GamDungeonDaredevil extends Game {
 		batch = new SpriteBatch();
 		scrMenu = new ScrMenu(this);
 		scrMap = new ScrMap(this);
-		setScreen(scrMenu);
+		updateState(0);
 	}
 
 	@Override
@@ -33,7 +33,18 @@ public class GamDungeonDaredevil extends Game {
 	public SpriteBatch getBatch() {
 		return batch;
 	}
-	
+
+	public void updateState(int nScreen) {
+		switch (nScreen) {
+			case 0:
+				setScreen(scrMenu);
+				break;
+			case 1:
+				setScreen(scrMap);
+				break;
+		}
+	}
+
 	@Override
 	public void dispose () {
 		batch.dispose();

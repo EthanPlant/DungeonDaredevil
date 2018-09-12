@@ -15,7 +15,7 @@ public class ScrMenu implements Screen {
 
         public ScrMenu(GamDungeonDaredevil game) {
             this.game = game;
-            img = new Texture("ScrMenu.png");
+            img = new Texture("titlescreen.png");
         }
 
     @Override

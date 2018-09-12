@@ -7,21 +7,18 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import pjkck.dungeondaredevil.screens.ScrMap;
+import pjkck.dungeondaredevil.screens.ScrMapScratch;
 import pjkck.dungeondaredevil.screens.ScrMenu;
-
-import static java.awt.SystemColor.menu;
 
 public class GamDungeonDaredevil extends Game {
 	SpriteBatch batch;
 	Texture img;
-	private ScrMenu scrMenu;
-	private ScrMap scrMap;
+	private ScrMapScratch scrMapScratch;
 	
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		scrMenu = new ScrMenu(this);
-		scrMap = new ScrMap(this);
+		scrMapScratch = new ScrMapScratch(this);
 		updateState(0);
 	}
 
@@ -37,10 +34,7 @@ public class GamDungeonDaredevil extends Game {
 	public void updateState(int nScreen) {
 		switch (nScreen) {
 			case 0:
-				setScreen(scrMenu);
-				break;
-			case 1:
-				setScreen(scrMap);
+				setScreen(scrMapScratch);
 				break;
 		}
 	}

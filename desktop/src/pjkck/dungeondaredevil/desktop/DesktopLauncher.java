@@ -7,6 +7,7 @@ import pjkck.dungeondaredevil.GamDungeonDaredevil;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+		config.fullscreen=true;
 		new LwjglApplication(new GamDungeonDaredevil(), config);
 	}
 }

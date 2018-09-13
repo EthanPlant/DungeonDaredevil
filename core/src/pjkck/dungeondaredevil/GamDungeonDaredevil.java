@@ -31,6 +31,7 @@ public class GamDungeonDaredevil extends Game {
 	}
 
 	public SpriteBatch getBatch() {
+
 		return batch;
 	}
 
@@ -48,6 +49,6 @@ public class GamDungeonDaredevil extends Game {
 	@Override
 	public void dispose () {
 		batch.dispose();
-		img.dispose();
+		//img.dispose();
 	}
 }

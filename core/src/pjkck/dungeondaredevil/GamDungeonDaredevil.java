@@ -19,6 +19,7 @@ public class GamDungeonDaredevil extends Game {
 	
 	@Override
 	public void create () {
+		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
 		batch = new SpriteBatch();
 		scrMenu = new ScrMenu(this);
 		scrMap = new ScrMap(this);

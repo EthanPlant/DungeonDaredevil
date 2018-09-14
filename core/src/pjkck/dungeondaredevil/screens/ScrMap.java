@@ -27,7 +27,7 @@ public class ScrMap implements Screen {
         this.game = game;
 
         cam = new OrthographicCamera();
-        port = new FitViewport(1920, 1080, cam);
+        port = new FitViewport(640, 360, cam);
         cam.position.set(port.getWorldWidth() / 2, port.getWorldHeight() / 2, 0);
 
         mapLoader = new TmxMapLoader();

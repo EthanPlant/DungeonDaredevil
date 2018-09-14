@@ -38,8 +38,7 @@ public class ScrMap implements Screen {
         map = mapLoader.load("map.tmx");
         renderer = new OrthogonalTiledMapRenderer(map);
         sprite = new Sprite(new Texture("player.jpg"));
-        sprite.setPosition(Gdx.graphics.getWidth()/2 - sprite.getWidth()/2,
-                Gdx.graphics.getHeight()/2 - sprite.getHeight()/2);
+        sprite.setPosition(port.getWorldWidth() / 2 - sprite.getWidth() / 2, port.getWorldHeight() / 2 - sprite.getHeight() / 2);
     }
 
 
@@ -50,22 +49,24 @@ public class ScrMap implements Screen {
 
     public void handleInput() {
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            cam.position.y += 10;
+            sprite.setY(sprite.getY() + 250 * Gdx.graphics.getDeltaTime());
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            cam.position.y -= 10;
+            sprite.setY(sprite.getY() - 250 * Gdx.graphics.getDeltaTime());
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            cam.position.x -= 10;
+            sprite.setX(sprite.getX() - 250 * Gdx.graphics.getDeltaTime());
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            cam.position.x += 10;
+            sprite.setX(sprite.getX() + 250 * Gdx.graphics.getDeltaTime());
         }
     }
 
     public void update() {
         handleInput();
-        
+
+        cam.position.set(sprite.getX(), sprite.getY(), 0);
+
         cam.update();
     }
 
@@ -74,19 +75,13 @@ public class ScrMap implements Screen {
         update();
 
         renderer.setView(cam);
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
-            sprite.translateX(-5f);
-        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT))
-            sprite.translateX(5f);
-        if(Gdx.input.isKeyPressed(Input.Keys.UP))
-            sprite.translateY(5f);
-        if(Gdx.input.isKeyPressed(Input.Keys.DOWN))
-            sprite.translateY(-5f);
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         renderer.render();
+
+        game.getBatch().setProjectionMatrix(cam.combined);
         game.getBatch().begin();
         game.getBatch().draw(sprite, sprite.getX(), sprite.getY());
         game.getBatch().end();

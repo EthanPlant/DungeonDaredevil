@@ -49,16 +49,16 @@ public class ScrMap implements Screen {
 
     public void handleInput() {
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            sprite.setY(sprite.getY() + 250 * Gdx.graphics.getDeltaTime());
+            sprite.setY(sprite.getY() + 300 * Gdx.graphics.getDeltaTime());
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            sprite.setY(sprite.getY() - 250 * Gdx.graphics.getDeltaTime());
+            sprite.setY(sprite.getY() - 300 * Gdx.graphics.getDeltaTime());
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            sprite.setX(sprite.getX() - 250 * Gdx.graphics.getDeltaTime());
+            sprite.setX(sprite.getX() - 300 * Gdx.graphics.getDeltaTime());
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            sprite.setX(sprite.getX() + 250 * Gdx.graphics.getDeltaTime());
+            sprite.setX(sprite.getX() + 300 * Gdx.graphics.getDeltaTime());
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             sprite.setY(sprite.getY() + 10000 * Gdx.graphics.getDeltaTime());

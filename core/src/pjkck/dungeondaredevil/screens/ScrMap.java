@@ -13,6 +13,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import pjkck.dungeondaredevil.GamDungeonDaredevil;
 import pjkck.dungeondaredevil.sprites.Player;
+import pjkck.dungeondaredevil.utils.TiledMapCollisionHandler;
 
 public class ScrMap implements Screen {
     Player player;
@@ -25,7 +26,7 @@ public class ScrMap implements Screen {
     private TmxMapLoader mapLoader;
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
-
+    private TiledMapCollisionHandler collisionHandler;
 
     public ScrMap(GamDungeonDaredevil game) {
         this.game = game;
@@ -37,6 +38,7 @@ public class ScrMap implements Screen {
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("map.tmx");
         renderer = new OrthogonalTiledMapRenderer(map);
+        collisionHandler = new TiledMapCollisionHandler(this);
         player = new Player(port.getWorldWidth() / 2, port.getWorldHeight() / 2);
     }
 
@@ -48,6 +50,8 @@ public class ScrMap implements Screen {
 
     public void handleInput() {
         player.setState(Player.STATE.STANDING);
+        float fStartX = player.getX();
+        float fStartY = player.getY();
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             player.setY(player.getY() + 300 * Gdx.graphics.getDeltaTime());
             player.setDirection(Player.DIRECTION.BACKWARD);
@@ -68,6 +72,10 @@ public class ScrMap implements Screen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             player.setY(player.getY() + 10000 * Gdx.graphics.getDeltaTime());
             player.setState(Player.STATE.DASHING);
+        }
+
+        if (collisionHandler.isColliding(player)) {
+            player.setPosition(fStartX, fStartY);
         }
     }
 
@@ -96,6 +104,10 @@ public class ScrMap implements Screen {
         game.getBatch().begin();
         game.getBatch().draw(player, player.getX(), player.getY());
         game.getBatch().end();
+    }
+
+    public TiledMap getMap() {
+        return map;
     }
 
     @Override

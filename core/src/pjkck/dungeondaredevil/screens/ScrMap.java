@@ -7,15 +7,15 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import pjkck.dungeondaredevil.GamDungeonDaredevil;
+import pjkck.dungeondaredevil.sprites.Player;
 
 public class ScrMap implements Screen {
-    Sprite sprite;
+    Player player;
 
     private GamDungeonDaredevil game;
 
@@ -37,8 +37,7 @@ public class ScrMap implements Screen {
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("map.tmx");
         renderer = new OrthogonalTiledMapRenderer(map);
-        sprite = new Sprite(new Texture("player.jpg"));
-        sprite.setPosition(port.getWorldWidth() / 2 - sprite.getWidth() / 2, port.getWorldHeight() / 2 - sprite.getHeight() / 2);
+        player = new Player(port.getWorldWidth() / 2, port.getWorldHeight() / 2);
     }
 
 
@@ -48,27 +47,36 @@ public class ScrMap implements Screen {
     }
 
     public void handleInput() {
+        player.setState(Player.STATE.STANDING);
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            sprite.setY(sprite.getY() + 300 * Gdx.graphics.getDeltaTime());
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            sprite.setY(sprite.getY() - 300 * Gdx.graphics.getDeltaTime());
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            sprite.setX(sprite.getX() - 300 * Gdx.graphics.getDeltaTime());
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            sprite.setX(sprite.getX() + 300 * Gdx.graphics.getDeltaTime());
+            player.setY(player.getY() + 300 * Gdx.graphics.getDeltaTime());
+            player.setDirection(Player.DIRECTION.BACKWARD);
+            player.setState(Player.STATE.WALKING);
+        } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+            player.setY(player.getY() - 300 * Gdx.graphics.getDeltaTime());
+            player.setDirection(Player.DIRECTION.FORWARD);
+            player.setState(Player.STATE.WALKING);
+        } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            player.setX(player.getX() - 300 * Gdx.graphics.getDeltaTime());
+            player.setDirection(Player.DIRECTION.LEFT);
+            player.setState(Player.STATE.WALKING);
+        } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            player.setX(player.getX() + 300 * Gdx.graphics.getDeltaTime());
+            player.setDirection(Player.DIRECTION.RIGHT);
+            player.setState(Player.STATE.WALKING);
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            sprite.setY(sprite.getY() + 10000 * Gdx.graphics.getDeltaTime());
+            player.setY(player.getY() + 10000 * Gdx.graphics.getDeltaTime());
+            player.setState(Player.STATE.DASHING);
         }
     }
 
     public void update() {
         handleInput();
-        
-        cam.position.set(sprite.getX(), sprite.getY(), 0);
+
+        player.update(Gdx.graphics.getDeltaTime());
+
+        cam.position.set(player.getX(), player.getY(), 0);
 
         cam.update();
     }
@@ -86,7 +94,7 @@ public class ScrMap implements Screen {
 
         game.getBatch().setProjectionMatrix(cam.combined);
         game.getBatch().begin();
-        game.getBatch().draw(sprite, sprite.getX(), sprite.getY());
+        game.getBatch().draw(player, player.getX(), player.getY());
         game.getBatch().end();
     }
 

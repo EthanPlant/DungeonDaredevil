@@ -67,7 +67,7 @@ public class ScrMap implements Screen {
 
     public void update() {
         handleInput();
-
+        
         cam.position.set(sprite.getX(), sprite.getY(), 0);
 
         cam.update();

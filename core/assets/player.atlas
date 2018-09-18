@@ -1,0 +1,33 @@
+player.png
+size: 256, 64
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Back-Walk
+  rotate: false
+  xy: 0, 0
+  size: 128, 32
+  orig: 128, 32
+  offset: 0, 0
+  index: -1
+Forward-Walk
+  rotate: false
+  xy: 128, 0
+  size: 128, 32
+  orig: 128, 32
+  offset: 0, 0
+  index: -1
+Left-Walk
+  rotate: false
+  xy: 0, 32
+  size: 128, 32
+  orig: 128, 32
+  offset: 0, 0
+  index: -1
+Right-Walk
+  rotate: false
+  xy: 128, 32
+  size: 128, 32
+  orig: 128, 32
+  offset: 0, 0
+  index: -1

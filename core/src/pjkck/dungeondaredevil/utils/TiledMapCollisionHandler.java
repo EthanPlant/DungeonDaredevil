@@ -10,14 +10,14 @@ import pjkck.dungeondaredevil.sprites.Player;
 
 public class TiledMapCollisionHandler {
 
-    private TiledMap map;
+    TiledMap map;
 
-    public TiledMapCollisionHandler(ScrMap screen) {
-        map = screen.getMap();
+    public TiledMapCollisionHandler(TiledMap map){
+        this.map = map;
     }
 
-    public boolean isColliding(Sprite sprite) {
-        for (MapObject object : map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)) {
+    public boolean isColliding(Sprite sprite, int nLayer) {
+        for (MapObject object : map.getLayers().get(nLayer).getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
             if (sprite.getBoundingRectangle().overlaps(rect)) {
                 return true;

@@ -38,7 +38,8 @@ public class ScrMap implements Screen {
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("map.tmx");
         renderer = new OrthogonalTiledMapRenderer(map);
-        collisionHandler = new TiledMapCollisionHandler(this);
+        collisionHandler = new TiledMapCollisionHandler(map);
+
         player = new Player(port.getWorldWidth() / 2, port.getWorldHeight() / 2);
     }
 
@@ -70,11 +71,11 @@ public class ScrMap implements Screen {
             player.setState(Player.STATE.WALKING);
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            player.setY(player.getY() + 10000 * Gdx.graphics.getDeltaTime());
+            player.setY(player.getY() + 5000 * Gdx.graphics.getDeltaTime());
             player.setState(Player.STATE.DASHING);
         }
 
-        if (collisionHandler.isColliding(player)) {
+        if (collisionHandler.isColliding(player, 2)) {
             player.setPosition(fStartX, fStartY);
         }
     }
@@ -104,10 +105,6 @@ public class ScrMap implements Screen {
         game.getBatch().begin();
         game.getBatch().draw(player, player.getX(), player.getY());
         game.getBatch().end();
-    }
-
-    public TiledMap getMap() {
-        return map;
     }
 
     @Override

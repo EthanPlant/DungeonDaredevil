@@ -1,5 +1,6 @@
 package pjkck.dungeondaredevil.sprites;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -77,6 +78,24 @@ public class Player extends Sprite {
 
         setRegion(arWalkingAnimations[0].getKeyFrame(0));
         setBounds(x, y, 32, 32);
+    }
+
+    public void dash() {
+        switch (direction) {
+            case FORWARD:
+                setY(getY() + 5000 * Gdx.graphics.getDeltaTime());
+                break;
+            case BACKWARD:
+                setY(getY() - 5000 * Gdx.graphics.getDeltaTime());
+                break;
+            case LEFT:
+                setX(getX() - 5000 * Gdx.graphics.getDeltaTime());
+                break;
+            case RIGHT:
+                setX(getX() + 5000 * Gdx.graphics.getDeltaTime());
+                break;
+        }
+        setState(STATE.DASHING);
     }
 
 

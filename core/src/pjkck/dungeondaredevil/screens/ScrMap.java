@@ -71,8 +71,7 @@ public class ScrMap implements Screen {
             player.setState(Player.STATE.WALKING);
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            player.setY(player.getY() + 5000 * Gdx.graphics.getDeltaTime());
-            player.setState(Player.STATE.DASHING);
+            player.dash();
         }
 
         if (collisionHandler.isColliding(player, 2)) {

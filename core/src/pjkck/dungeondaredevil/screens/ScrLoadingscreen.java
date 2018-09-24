@@ -9,22 +9,20 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import pjkck.dungeondaredevil.GamDungeonDaredevil;
 
-public class ScrMenu implements Screen {
+public class ScrLoadingscreen implements Screen {
 
+    private Texture img;
+    private GamDungeonDaredevil game;
+    private FitViewport port;
+    private OrthographicCamera cam;
 
-        private Texture img;
-        private GamDungeonDaredevil game;
-        private FitViewport port;
-        private OrthographicCamera cam;
-
-
-        public ScrMenu(GamDungeonDaredevil game) {
-            cam = new OrthographicCamera();
-            port = new FitViewport(1920, 1080, cam);
-            cam.position.set(port.getWorldWidth()/2, port.getWorldHeight()/2, 0);
-            this.game = game;
-            img = new Texture("titlescreen.png");
-        }
+    public ScrLoadingscreen(GamDungeonDaredevil game) {
+        cam = new OrthographicCamera();
+        port = new FitViewport(1920, 1080, cam);
+        cam.position.set(port.getWorldWidth()/2, port.getWorldHeight()/2, 0);
+        this.game = game;
+        img = new Texture("LoadingScreen.png");
+    }
 
     @Override
     public void show() {
@@ -41,15 +39,14 @@ public class ScrMenu implements Screen {
         game.getBatch().begin();
         game.getBatch().draw(img, 0, 0);
         game.getBatch().end();
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            game.updateState(1);
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            game.updateState(0);
         }
     }
 
     @Override
     public void resize(int width, int height) {
         port.update(width, height);
-
     }
 
     @Override

@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -17,6 +18,8 @@ import pjkck.dungeondaredevil.utils.TiledMapCollisionHandler;
 
 public class ScrMap implements Screen {
     Player player;
+    Texture img;
+    Sprite sprite;
 
     private GamDungeonDaredevil game;
 
@@ -41,6 +44,10 @@ public class ScrMap implements Screen {
         collisionHandler = new TiledMapCollisionHandler(map);
 
         player = new Player(port.getWorldWidth() / 2, port.getWorldHeight() / 2);
+        img = new Texture("enemy.png");
+        sprite = new Sprite(img);
+        sprite.setPosition(Gdx.graphics.getWidth()/2 - sprite.getWidth()/2,
+                Gdx.graphics.getHeight()/2 - sprite.getHeight()/2);
     }
 
 
@@ -103,6 +110,7 @@ public class ScrMap implements Screen {
         game.getBatch().setProjectionMatrix(cam.combined);
         game.getBatch().begin();
         game.getBatch().draw(player, player.getX(), player.getY());
+        game.getBatch().draw(sprite, sprite.getX(), sprite.getY());
         game.getBatch().end();
     }
 

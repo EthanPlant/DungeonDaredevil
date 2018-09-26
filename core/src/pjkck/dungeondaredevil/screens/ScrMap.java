@@ -14,12 +14,13 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import pjkck.dungeondaredevil.GamDungeonDaredevil;
 import pjkck.dungeondaredevil.sprites.Player;
+import pjkck.dungeondaredevil.sprites.enemies.Guck;
 import pjkck.dungeondaredevil.utils.TiledMapCollisionHandler;
 
 public class ScrMap implements Screen {
     Player player;
-    Texture img;
-    Sprite sprite;
+
+    Guck guck;
 
     private GamDungeonDaredevil game;
 
@@ -44,10 +45,7 @@ public class ScrMap implements Screen {
         collisionHandler = new TiledMapCollisionHandler(map);
 
         player = new Player(port.getWorldWidth() / 2, port.getWorldHeight() / 2);
-        img = new Texture("enemy.png");
-        sprite = new Sprite(img);
-        sprite.setPosition(Gdx.graphics.getWidth()/2 - sprite.getWidth()/2,
-                Gdx.graphics.getHeight()/2 - sprite.getHeight()/2);
+        guck = new Guck(300, 300);
     }
 
 
@@ -89,6 +87,8 @@ public class ScrMap implements Screen {
     public void update() {
         handleInput();
 
+        guck.update(Gdx.graphics.getDeltaTime());
+
         player.update(Gdx.graphics.getDeltaTime());
 
         cam.position.set(player.getX(), player.getY(), 0);
@@ -109,8 +109,8 @@ public class ScrMap implements Screen {
 
         game.getBatch().setProjectionMatrix(cam.combined);
         game.getBatch().begin();
-        game.getBatch().draw(player, player.getX(), player.getY());
-        game.getBatch().draw(sprite, sprite.getX(), sprite.getY());
+        player.draw(game.getBatch());
+        guck.draw(game.getBatch());
         game.getBatch().end();
     }
 

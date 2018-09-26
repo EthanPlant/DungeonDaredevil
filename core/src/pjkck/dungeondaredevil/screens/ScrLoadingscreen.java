@@ -18,7 +18,7 @@ public class ScrLoadingscreen implements Screen {
     private OrthographicCamera cam;
 
     Sound startupSound;
-
+ 
     public ScrLoadingscreen(GamDungeonDaredevil game) {
         cam = new OrthographicCamera();
         port = new FitViewport(1920, 1080, cam);

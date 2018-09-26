@@ -92,6 +92,8 @@ public class ScrMap implements Screen {
         handleInput();
 
         for (Enemy e : arEnemies) {
+            float fStartX = e.getX();
+            float fStartY = e.getY();
             if(new Random().nextInt(4) == 0){
                 e.setX(e.getX() - 100 * Gdx.graphics.getDeltaTime());
             }
@@ -103,6 +105,9 @@ public class ScrMap implements Screen {
             }
             if(new Random().nextInt(4) == 3){
                 e.setY(e.getY() + 100 * Gdx.graphics.getDeltaTime());
+            }
+            if (collisionHandler.isColliding(e, 2)) {
+                e.setPosition(fStartX, fStartY);
             }
             e.update(Gdx.graphics.getDeltaTime());
         }

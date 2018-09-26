@@ -5,22 +5,22 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import pjkck.dungeondaredevil.GamDungeonDaredevil;
 import pjkck.dungeondaredevil.sprites.Player;
+import pjkck.dungeondaredevil.sprites.enemies.Enemy;
 import pjkck.dungeondaredevil.sprites.enemies.Guck;
 import pjkck.dungeondaredevil.utils.TiledMapCollisionHandler;
 
 public class ScrMap implements Screen {
     Player player;
 
-    Guck guck;
+    private Array<Guck> arEnemies;
 
     private GamDungeonDaredevil game;
 
@@ -45,7 +45,10 @@ public class ScrMap implements Screen {
         collisionHandler = new TiledMapCollisionHandler(map);
 
         player = new Player(port.getWorldWidth() / 2, port.getWorldHeight() / 2);
-        guck = new Guck(300, 300);
+        arEnemies = new Array<Guck>();
+        for (int i = 0; i < 10; i++) {
+            arEnemies.add(new Guck(MathUtils.random(0, 700), MathUtils.random(0, 700)));
+        }
     }
 
 
@@ -87,7 +90,9 @@ public class ScrMap implements Screen {
     public void update() {
         handleInput();
 
-        guck.update(Gdx.graphics.getDeltaTime());
+        for (Enemy e : arEnemies) {
+            e.update(Gdx.graphics.getDeltaTime());
+        }
 
         player.update(Gdx.graphics.getDeltaTime());
 
@@ -110,7 +115,9 @@ public class ScrMap implements Screen {
         game.getBatch().setProjectionMatrix(cam.combined);
         game.getBatch().begin();
         player.draw(game.getBatch());
-        guck.draw(game.getBatch());
+        for (Enemy e : arEnemies) {
+            e.draw(game.getBatch());
+        }
         game.getBatch().end();
     }
 

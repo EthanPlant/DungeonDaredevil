@@ -16,6 +16,7 @@ import pjkck.dungeondaredevil.sprites.Player;
 import pjkck.dungeondaredevil.sprites.enemies.Enemy;
 import pjkck.dungeondaredevil.sprites.enemies.Guck;
 import pjkck.dungeondaredevil.utils.TiledMapCollisionHandler;
+import java.util.Random;
 
 public class ScrMap implements Screen {
     Player player;
@@ -91,8 +92,22 @@ public class ScrMap implements Screen {
         handleInput();
 
         for (Enemy e : arEnemies) {
+            if(new Random().nextInt(4) == 0){
+                e.setX(e.getX() - 100 * Gdx.graphics.getDeltaTime());
+            }
+            if(new Random().nextInt(4) == 1){
+                e.setY(e.getY() - 100 * Gdx.graphics.getDeltaTime());
+            }
+            if(new Random().nextInt(4) == 2){
+                e.setX(e.getX() + 100 * Gdx.graphics.getDeltaTime());
+            }
+            if(new Random().nextInt(4) == 3){
+                e.setY(e.getY() + 100 * Gdx.graphics.getDeltaTime());
+            }
             e.update(Gdx.graphics.getDeltaTime());
         }
+
+
 
         player.update(Gdx.graphics.getDeltaTime());
 

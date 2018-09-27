@@ -15,6 +15,7 @@ import pjkck.dungeondaredevil.GamDungeonDaredevil;
 import pjkck.dungeondaredevil.sprites.Player;
 import pjkck.dungeondaredevil.sprites.enemies.Enemy;
 import pjkck.dungeondaredevil.sprites.enemies.Guck;
+import pjkck.dungeondaredevil.utils.SpriteColisionHandler;
 import pjkck.dungeondaredevil.utils.TiledMapCollisionHandler;
 import java.util.Random;
 
@@ -33,6 +34,8 @@ public class ScrMap implements Screen {
     private OrthogonalTiledMapRenderer renderer;
     private TiledMapCollisionHandler collisionHandler;
 
+    private SpriteColisionHandler spriteColisionHandler;
+
     public ScrMap(GamDungeonDaredevil game) {
         this.game = game;
 
@@ -47,6 +50,8 @@ public class ScrMap implements Screen {
 
         player = new Player(port.getWorldWidth() / 2, port.getWorldHeight() / 2);
         arEnemies = new Array<Guck>();
+
+        spriteColisionHandler = new SpriteColisionHandler();
 
     }
 
@@ -86,6 +91,12 @@ public class ScrMap implements Screen {
         if (collisionHandler.isColliding(player, 2)) {
             player.setPosition(fStartX, fStartY);
         }
+
+        for (Enemy e : arEnemies) {
+            if (spriteColisionHandler.isColliding(player, e)) {
+                player.setPosition(fStartX, fStartY);
+            }
+        }
     }
 
     public void update() {
@@ -109,10 +120,13 @@ public class ScrMap implements Screen {
             if (collisionHandler.isColliding(e, 2)) {
                 e.setPosition(fStartX, fStartY);
             }
+
+            if (spriteColisionHandler.isColliding(player, e)) {
+                e.setPosition(fStartX, fStartY);
+            }
+
             e.update(Gdx.graphics.getDeltaTime());
         }
-
-
 
         player.update(Gdx.graphics.getDeltaTime());
 

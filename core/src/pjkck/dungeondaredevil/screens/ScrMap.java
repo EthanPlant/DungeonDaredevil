@@ -47,15 +47,15 @@ public class ScrMap implements Screen {
 
         player = new Player(port.getWorldWidth() / 2, port.getWorldHeight() / 2);
         arEnemies = new Array<Guck>();
-        for (int i = 0; i < 10; i++) {
-            arEnemies.add(new Guck(MathUtils.random(64, 704), MathUtils.random(64, 672)));
-        }
+
     }
 
 
     @Override
     public void show() {
-
+        for (int i = 0; i < 25; i++) {
+            arEnemies.add(new Guck(MathUtils.random(64, 704), MathUtils.random(64, 672)));
+        }
     }
 
     public void handleInput() {

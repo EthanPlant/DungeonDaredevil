@@ -27,7 +27,7 @@ public class Player extends Sprite {
 
     private float fElapsedTime;
 
-    public Player(float x, float y) {
+    public Player(float fX, float fY) {
         super();
 
         Texture txSpritesheet = new Texture("player.png");
@@ -77,7 +77,7 @@ public class Player extends Sprite {
         state = STATE.STANDING;
 
         setRegion(arWalkingAnimations[0].getKeyFrame(0));
-        setBounds(x, y, 32, 32);
+        setBounds(fX, fY, 32, 32);
     }
 
     public void dash() {

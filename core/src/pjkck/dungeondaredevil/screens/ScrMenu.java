@@ -11,8 +11,7 @@ import pjkck.dungeondaredevil.GamDungeonDaredevil;
 
 public class ScrMenu implements Screen {
 
-
-        private Texture img;
+        private Texture txImg;
         private GamDungeonDaredevil game;
         private FitViewport port;
         private OrthographicCamera cam;
@@ -23,7 +22,7 @@ public class ScrMenu implements Screen {
             port = new FitViewport(1920, 1080, cam);
             cam.position.set(port.getWorldWidth()/2, port.getWorldHeight()/2, 0);
             this.game = game;
-            img = new Texture("titlescreen.png");
+            txImg = new Texture("titlescreen.png");
         }
 
     @Override
@@ -39,10 +38,10 @@ public class ScrMenu implements Screen {
 
         game.getBatch().setProjectionMatrix(cam.combined);
         game.getBatch().begin();
-        game.getBatch().draw(img, 0, 0);
+        game.getBatch().draw(txImg, 0, 0);
         game.getBatch().end();
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            game.updateState(1);
+            game.updateState(2);
         }
     }
 
@@ -69,6 +68,6 @@ public class ScrMenu implements Screen {
 
     @Override
     public void dispose() {
-
+        txImg.dispose();
     }
 }

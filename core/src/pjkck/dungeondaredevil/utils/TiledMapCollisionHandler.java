@@ -5,8 +5,6 @@ import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
-import pjkck.dungeondaredevil.screens.ScrMap;
-import pjkck.dungeondaredevil.sprites.Player;
 
 public class TiledMapCollisionHandler {
 

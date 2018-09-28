@@ -19,8 +19,8 @@ import pjkck.dungeondaredevil.utils.SpriteColisionHandler;
 import pjkck.dungeondaredevil.utils.TiledMapCollisionHandler;
 import java.util.Random;
 
-public class ScrMap implements Screen {
-    Player player;
+public class ScrGame implements Screen {
+    private Player player;
 
     private Array<Guck> arEnemies;
 
@@ -36,7 +36,7 @@ public class ScrMap implements Screen {
 
     private SpriteColisionHandler spriteColisionHandler;
 
-    public ScrMap(GamDungeonDaredevil game) {
+    public ScrGame(GamDungeonDaredevil game) {
         this.game = game;
 
         cam = new OrthographicCamera();
@@ -227,6 +227,7 @@ public class ScrMap implements Screen {
 
     @Override
     public void dispose() {
-
+        arEnemies.clear();
+        map.dispose();
     }
 }

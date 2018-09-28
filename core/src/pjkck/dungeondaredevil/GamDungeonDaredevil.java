@@ -1,22 +1,17 @@
 package pjkck.dungeondaredevil;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import pjkck.dungeondaredevil.screens.ScrLoadingscreen;
-import pjkck.dungeondaredevil.screens.ScrMap;
+import pjkck.dungeondaredevil.screens.ScrGame;
 import pjkck.dungeondaredevil.screens.ScrMenu;
 
-import static java.awt.SystemColor.menu;
 
 public class GamDungeonDaredevil extends Game {
 	SpriteBatch batch;
-	Texture img;
 	private ScrMenu scrMenu;
-	private ScrMap scrMap;
+	private ScrGame scrGame;
 	private ScrLoadingscreen scrLoadingscreen;
 	
 	@Override
@@ -24,9 +19,9 @@ public class GamDungeonDaredevil extends Game {
 		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
 		batch = new SpriteBatch();
 		scrMenu = new ScrMenu(this);
-		scrMap = new ScrMap(this);
+		scrGame = new ScrGame(this);
 		scrLoadingscreen = new ScrLoadingscreen(this);
-		updateState(2);
+		updateState(0);
 	}
 
 	@Override
@@ -42,13 +37,13 @@ public class GamDungeonDaredevil extends Game {
 	public void updateState(int nScreen) {
 		switch (nScreen) {
 			case 0:
-				setScreen(scrMenu);
+				setScreen(scrLoadingscreen);
 				break;
 			case 1:
-				setScreen(scrMap);
+				setScreen(scrMenu);
 				break;
 			case 2:
-				setScreen(scrLoadingscreen);
+				setScreen(scrGame);
 				break;
 		}
 	}
@@ -56,6 +51,5 @@ public class GamDungeonDaredevil extends Game {
 	@Override
 	public void dispose () {
 		batch.dispose();
-		//img.dispose();
 	}
 }

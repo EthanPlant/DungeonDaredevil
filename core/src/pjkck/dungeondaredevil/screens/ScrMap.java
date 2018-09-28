@@ -89,12 +89,62 @@ public class ScrMap implements Screen {
         }
 
         if (collisionHandler.isColliding(player, 2)) {
-            player.setPosition(fStartX, fStartY);
+            if (player.getState() == Player.STATE.DASHING) {
+                switch (player.getDirection()) {
+                    case FORWARD:
+                        while (collisionHandler.isColliding(player, 2)) {
+                            player.setY(player.getY() + 32);
+                        }
+                        break;
+                    case BACKWARD:
+                        while (collisionHandler.isColliding(player, 2)) {
+                            player.setY(player.getY() - 32);
+                        }
+                        break;
+                    case LEFT:
+                        while (collisionHandler.isColliding(player, 2)) {
+                            player.setX(player.getX() + 32);
+                        }
+                        break;
+                    case RIGHT:
+                        while (collisionHandler.isColliding(player, 2)) {
+                            player.setX(player.getX() - 32);
+                        }
+                        break;
+                }
+            } else {
+                player.setPosition(fStartX, fStartY);
+            }
         }
 
         for (Enemy e : arEnemies) {
             if (spriteColisionHandler.isColliding(player, e)) {
-                player.setPosition(fStartX, fStartY);
+                if (player.getState() == Player.STATE.DASHING) {
+                    switch (player.getDirection()) {
+                        case FORWARD:
+                            while (spriteColisionHandler.isColliding(player, e)) {
+                                player.setY(player.getY() + 32);
+                            }
+                            break;
+                        case BACKWARD:
+                            while (spriteColisionHandler.isColliding(player, e)) {
+                                player.setY(player.getY() - 32);
+                            }
+                            break;
+                        case LEFT:
+                            while (spriteColisionHandler.isColliding(player, e)) {
+                                player.setX(player.getX() + 32);
+                            }
+                            break;
+                        case RIGHT:
+                            while (spriteColisionHandler.isColliding(player, e)) {
+                                player.setX(player.getX() - 32);
+                            }
+                            break;
+                    }
+                } else {
+                    player.setPosition(fStartX, fStartY);
+                }
             }
         }
     }

@@ -83,10 +83,10 @@ public class Player extends Sprite {
     public void dash() {
         switch (direction) {
             case FORWARD:
-                setY(getY() + 5000 * Gdx.graphics.getDeltaTime());
+                setY(getY() - 5000 * Gdx.graphics.getDeltaTime());
                 break;
             case BACKWARD:
-                setY(getY() - 5000 * Gdx.graphics.getDeltaTime());
+                setY(getY() + 5000 * Gdx.graphics.getDeltaTime());
                 break;
             case LEFT:
                 setX(getX() - 5000 * Gdx.graphics.getDeltaTime());
@@ -105,6 +105,14 @@ public class Player extends Sprite {
 
     public void setState(STATE state) {
         this.state = state;
+    }
+
+    public STATE getState() {
+        return state;
+    }
+
+    public DIRECTION getDirection() {
+        return direction;
     }
 
     public void update(float delta) {

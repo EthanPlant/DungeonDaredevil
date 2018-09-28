@@ -27,7 +27,7 @@ public class ScrLoadingscreen implements Screen {
         img = new Texture("LoadingScreen.png");
 
         startupSound = Gdx.audio.newSound(Gdx.files.internal("startup.mp3"));
-        startupSound.play();
+     //   startupSound.play();
     }
 
     @Override

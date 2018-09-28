@@ -25,6 +25,8 @@ public class ScrLoadingscreen implements Screen {
         cam.position.set(port.getWorldWidth()/2, port.getWorldHeight()/2, 0);
         this.game = game;
         txImg = new Texture("LoadingScreen.png");
+
+        fElapsedTime = 0;
     }
 
     @Override
@@ -43,7 +45,7 @@ public class ScrLoadingscreen implements Screen {
         game.getBatch().begin();
         game.getBatch().draw(txImg, 0, 0);
         game.getBatch().end();
-        if (fElapsedTime >= 5000) {
+        if (fElapsedTime >= 5) {
             game.updateState(1);
             dispose();
         }

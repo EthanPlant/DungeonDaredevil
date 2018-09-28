@@ -93,22 +93,22 @@ public class ScrGame implements Screen {
                 switch (player.getDirection()) {
                     case FORWARD:
                         while (collisionHandler.isColliding(player, 2)) {
-                            player.setY(player.getY() + 32);
+                            player.setY(player.getY() + 1);
                         }
                         break;
                     case BACKWARD:
                         while (collisionHandler.isColliding(player, 2)) {
-                            player.setY(player.getY() - 32);
+                            player.setY(player.getY() - 1);
                         }
                         break;
                     case LEFT:
                         while (collisionHandler.isColliding(player, 2)) {
-                            player.setX(player.getX() + 32);
+                            player.setX(player.getX() + 1);
                         }
                         break;
                     case RIGHT:
                         while (collisionHandler.isColliding(player, 2)) {
-                            player.setX(player.getX() - 32);
+                            player.setX(player.getX() - 1);
                         }
                         break;
                 }

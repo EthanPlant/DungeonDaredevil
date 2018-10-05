@@ -27,6 +27,9 @@ public class Player extends Sprite {
 
     private float fElapsedTime;
 
+    private float fDeltaX;
+    private float fDeltaY;
+
     public Player(float fX, float fY) {
         super();
 
@@ -78,6 +81,9 @@ public class Player extends Sprite {
 
         setRegion(arWalkingAnimations[0].getKeyFrame(0));
         setBounds(fX, fY, 32, 32);
+
+        fDeltaX = 0;
+        fDeltaY  = 0;
     }
 
     public void dash() {
@@ -98,6 +104,13 @@ public class Player extends Sprite {
         setState(STATE.DASHING);
     }
 
+    public void setDeltaX(float value) {
+        fDeltaX = value;
+    }
+
+    public void setDeltaY(float value) {
+        fDeltaY = value;
+    }
 
     public void setDirection(DIRECTION direction) {
         this.direction = direction;
@@ -117,6 +130,24 @@ public class Player extends Sprite {
 
     public void update(float delta) {
         fElapsedTime += delta;
+
+        setPosition(getX() + fDeltaX * Gdx.graphics.getDeltaTime(), getY() + fDeltaY * Gdx.graphics.getDeltaTime());
+
+        if (fDeltaX != 0 | fDeltaY != 0) {
+            setState(STATE.WALKING);
+        } else {
+            setState(STATE.STANDING);
+        }
+
+        if (fDeltaY > 0) {
+            setDirection(DIRECTION.BACKWARD);
+        } else if (fDeltaY < 0) {
+            setDirection(DIRECTION.FORWARD);
+        } else if (fDeltaX > 0) {
+            setDirection(DIRECTION.RIGHT);
+        } else if (fDeltaX < 0) {
+            setDirection(DIRECTION.LEFT);
+        }
 
         if (state == STATE.STANDING || state == STATE.DASHING) {
             switch (direction) {

@@ -64,25 +64,18 @@ public class ScrGame implements Screen {
     }
 
     public void handleInput() {
-        player.setState(Player.STATE.STANDING);
+        player.setDeltaX(0);
+        player.setDeltaY(0);
         float fStartX = player.getX();
         float fStartY = player.getY();
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            player.setY(player.getY() + 300 * Gdx.graphics.getDeltaTime());
-            player.setDirection(Player.DIRECTION.BACKWARD);
-            player.setState(Player.STATE.WALKING);
+            player.setDeltaY(300);
         } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            player.setY(player.getY() - 300 * Gdx.graphics.getDeltaTime());
-            player.setDirection(Player.DIRECTION.FORWARD);
-            player.setState(Player.STATE.WALKING);
+            player.setDeltaY(-300);
         } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            player.setX(player.getX() - 300 * Gdx.graphics.getDeltaTime());
-            player.setDirection(Player.DIRECTION.LEFT);
-            player.setState(Player.STATE.WALKING);
+            player.setDeltaX(-300);
         } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            player.setX(player.getX() + 300 * Gdx.graphics.getDeltaTime());
-            player.setDirection(Player.DIRECTION.RIGHT);
-            player.setState(Player.STATE.WALKING);
+            player.setDeltaX(300);
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             player.dash();
@@ -113,6 +106,8 @@ public class ScrGame implements Screen {
                         break;
                 }
             } else {
+                player.setDeltaX(0);
+                player.setDeltaY(0);
                 player.setPosition(fStartX, fStartY);
             }
         }
@@ -143,6 +138,8 @@ public class ScrGame implements Screen {
                             break;
                     }
                 } else {
+                    player.setDeltaX(0);
+                    player.setDeltaY(0);
                     player.setPosition(fStartX, fStartY);
                 }
             }

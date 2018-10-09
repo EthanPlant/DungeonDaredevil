@@ -7,6 +7,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import pjkck.dungeondaredevil.GamDungeonDaredevil;
 
@@ -17,13 +18,16 @@ public class ScrLoadingscreen implements Screen {
     private FitViewport port;
     private OrthographicCamera cam;
 
+    private SpriteBatch batch;
+
     private float fElapsedTime;
 
-    public ScrLoadingscreen(GamDungeonDaredevil game) {
+    public ScrLoadingscreen(GamDungeonDaredevil game, SpriteBatch batch) {
         cam = new OrthographicCamera();
         port = new FitViewport(1920, 1080, cam);
         cam.position.set(port.getWorldWidth()/2, port.getWorldHeight()/2, 0);
         this.game = game;
+        this.batch = batch;
         txImg = new Texture("LoadingScreen.png");
 
         fElapsedTime = 0;
@@ -41,10 +45,10 @@ public class ScrLoadingscreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        game.getBatch().setProjectionMatrix(cam.combined);
-        game.getBatch().begin();
-        game.getBatch().draw(txImg, 0, 0);
-        game.getBatch().end();
+        batch.setProjectionMatrix(cam.combined);
+        batch.begin();
+        batch.draw(txImg, 0, 0);
+        batch.end();
         if (fElapsedTime >= 5) {
             game.updateState(1);
             dispose();

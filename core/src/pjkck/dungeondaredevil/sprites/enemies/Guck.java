@@ -1,8 +1,11 @@
 package pjkck.dungeondaredevil.sprites.enemies;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
+import java.util.Random;
 
 public class Guck extends Enemy {
 
@@ -23,7 +26,24 @@ public class Guck extends Enemy {
     }
 
     @Override
+    public void move() {
+        if(new Random().nextInt(4) == 0){
+            setX(getX() - 100 * Gdx.graphics.getDeltaTime());
+        }
+        if(new Random().nextInt(4) == 1){
+            setY(getY() - 100 * Gdx.graphics.getDeltaTime());
+        }
+        if(new Random().nextInt(4) == 2){
+            setX(getX() + 100 * Gdx.graphics.getDeltaTime());
+        }
+        if(new Random().nextInt(4) == 3){
+            setY(getY() + 100 * Gdx.graphics.getDeltaTime());
+        }
+    }
+
+    @Override
     public void update(float delta) {
+        move();
         fElapsedTime += delta;
         setRegion(animMovement.getKeyFrame(fElapsedTime, true));
     }

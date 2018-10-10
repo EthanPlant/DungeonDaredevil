@@ -16,5 +16,7 @@ public abstract class Enemy extends Sprite {
         setBounds(fX, fY, 32, 32);
     }
 
+    public abstract void move();
+
     public abstract void update(float delta);
 }

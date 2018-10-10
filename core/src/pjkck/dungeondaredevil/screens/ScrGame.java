@@ -10,20 +10,17 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import pjkck.dungeondaredevil.GamDungeonDaredevil;
 import pjkck.dungeondaredevil.sprites.Player;
-import pjkck.dungeondaredevil.sprites.enemies.Enemy;
-import pjkck.dungeondaredevil.sprites.enemies.Guck;
 import pjkck.dungeondaredevil.utils.SpriteColisionHandler;
 import pjkck.dungeondaredevil.utils.TiledMapCollisionHandler;
 import java.util.Random;
 
 public class ScrGame implements Screen {
     private Player player;
-
-    private Array<Guck> arEnemies;
 
     private GamDungeonDaredevil game;
 
@@ -53,8 +50,6 @@ public class ScrGame implements Screen {
         collisionHandler = new TiledMapCollisionHandler(map);
 
         player = new Player(port.getWorldWidth() / 2, port.getWorldHeight() / 2);
-        arEnemies = new Array<Guck>();
-
         spriteColisionHandler = new SpriteColisionHandler();
 
     }
@@ -62,22 +57,21 @@ public class ScrGame implements Screen {
 
     @Override
     public void show() {
-        for (int i = 0; i < 10; i++) {
-            arEnemies.add(new Guck(MathUtils.random(64, 704), MathUtils.random(64, 672)));
-        }
     }
 
     public void handleInput() {
         player.setDeltaX(0);
         player.setDeltaY(0);
+        Vector3 vMousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+        cam.unproject(vMousePos);
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            player.setDeltaY(300);
+            player.walk(vMousePos, 0);
         } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            player.setDeltaY(-300);
+            player.walk(vMousePos, 1);
         } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            player.setDeltaX(-300);
+            player.walk(vMousePos, 2);
         } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            player.setDeltaX(300);
+            player.walk(vMousePos, 3);
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             player.dash();
@@ -91,59 +85,6 @@ public class ScrGame implements Screen {
         float fStartY = player.getY();
 
         player.update(Gdx.graphics.getDeltaTime());
-
-        for (Enemy e : arEnemies) {
-            float fEStartX = e.getX();
-            float fEStartY = e.getY();
-            if(new Random().nextInt(4) == 0){
-                e.setX(e.getX() - 100 * Gdx.graphics.getDeltaTime());
-            }
-            if(new Random().nextInt(4) == 1){
-                e.setY(e.getY() - 100 * Gdx.graphics.getDeltaTime());
-            }
-            if(new Random().nextInt(4) == 2){
-                e.setX(e.getX() + 100 * Gdx.graphics.getDeltaTime());
-            }
-            if(new Random().nextInt(4) == 3){
-                e.setY(e.getY() + 100 * Gdx.graphics.getDeltaTime());
-            }
-            if (collisionHandler.isColliding(e, 2)) {
-                e.setPosition(fStartX, fStartY);
-            }
-
-            if (spriteColisionHandler.isColliding(player, e)) {
-                e.setPosition(fEStartX, fEStartY);
-
-                if (player.getState() == Player.STATE.DASHING) {
-                    switch (player.getDirection()) {
-                        case FORWARD:
-                            while (spriteColisionHandler.isColliding(player, e)) {
-                                player.setY(player.getY() + 32);
-                            }
-                            break;
-                        case BACKWARD:
-                            while (spriteColisionHandler.isColliding(player, e)) {
-                                player.setY(player.getY() - 32);
-                            }
-                            break;
-                        case LEFT:
-                            while (spriteColisionHandler.isColliding(player, e)) {
-                                player.setX(player.getX() + 32);
-                            }
-                            break;
-                        case RIGHT:
-                            while (spriteColisionHandler.isColliding(player, e)) {
-                                player.setX(player.getX() - 32);
-                            }
-                            break;
-                    }
-                } else {
-                    player.setPosition(fStartX, fStartY);
-                }
-            }
-
-            e.update(Gdx.graphics.getDeltaTime());
-        }
 
         if (collisionHandler.isColliding(player, 2)) {
             if (player.getState() == Player.STATE.DASHING) {
@@ -183,8 +124,8 @@ public class ScrGame implements Screen {
     public void render(float delta) {
         update();
 
-        Gdx.app.log("FPS", Integer.toString(Gdx.graphics.getFramesPerSecond()));
-        Gdx.app.log("DT", Float.toString(Gdx.graphics.getDeltaTime()));
+//        Gdx.app.log("FPS", Integer.toString(Gdx.graphics.getFramesPerSecond()));
+//        Gdx.app.log("DT", Float.toString(Gdx.graphics.getDeltaTime()));
 
         renderer.setView(cam);
 
@@ -196,9 +137,6 @@ public class ScrGame implements Screen {
         batch.setProjectionMatrix(cam.combined);
         batch.begin();
         player.draw(batch);
-        for (Enemy e : arEnemies) {
-            e.draw(batch);
-        }
         batch.end();
     }
 
@@ -224,7 +162,6 @@ public class ScrGame implements Screen {
 
     @Override
     public void dispose() {
-        arEnemies.clear();
         map.dispose();
     }
 }

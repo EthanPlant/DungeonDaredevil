@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector3;
 
 public class Player extends Sprite {
     public enum DIRECTION {
@@ -81,6 +83,7 @@ public class Player extends Sprite {
 
         setRegion(arWalkingAnimations[0].getKeyFrame(0));
         setBounds(fX, fY, 32, 32);
+        setOriginCenter();
 
         fDeltaX = 0;
         fDeltaY  = 0;
@@ -102,6 +105,28 @@ public class Player extends Sprite {
                 break;
         }
         setState(STATE.DASHING);
+    }
+
+    public void walk(Vector3 vMousePos, int nDirection) {
+        float fAngle = MathUtils.atan2((vMousePos.y - getY()), (vMousePos.x - getX()));
+        switch (nDirection) {
+            case 0:
+                fDeltaX = 300 * MathUtils.cos(fAngle);
+                fDeltaY = 300 * MathUtils.sin(fAngle);
+                break;
+            case 1:
+                fDeltaX = -300 * MathUtils.cos(fAngle);
+                fDeltaY = -300 * MathUtils.sin(fAngle);
+                break;
+            case 2:
+                fDeltaX = -300 * MathUtils.cos(fAngle + 90);
+                fDeltaY = -300 * MathUtils.sin(fAngle + 90);
+                break;
+            case 3:
+                fDeltaX = -300 * MathUtils.cos(fAngle -90);
+                fDeltaY = -300 * MathUtils.sin(fAngle - 90);
+        }
+        System.out.println(Math.toDegrees(fAngle));
     }
 
     public void setDeltaX(float value) {
@@ -137,16 +162,6 @@ public class Player extends Sprite {
             setState(STATE.WALKING);
         } else {
             setState(STATE.STANDING);
-        }
-
-        if (fDeltaY > 0) {
-            setDirection(DIRECTION.BACKWARD);
-        } else if (fDeltaY < 0) {
-            setDirection(DIRECTION.FORWARD);
-        } else if (fDeltaX > 0) {
-            setDirection(DIRECTION.RIGHT);
-        } else if (fDeltaX < 0) {
-            setDirection(DIRECTION.LEFT);
         }
 
         if (state == STATE.STANDING || state == STATE.DASHING) {

@@ -109,6 +109,7 @@ public class Player extends Sprite {
 
     public void walk(Vector3 vMousePos, int nDirection) {
         float fAngle = MathUtils.atan2((vMousePos.y - getY()), (vMousePos.x - getX()));
+        setRotation((float) (Math.toDegrees(fAngle) - 90));
         switch (nDirection) {
             case 0:
                 fDeltaX = 300 * MathUtils.cos(fAngle);
@@ -119,14 +120,13 @@ public class Player extends Sprite {
                 fDeltaY = -300 * MathUtils.sin(fAngle);
                 break;
             case 2:
-                fDeltaX = -300 * MathUtils.cos(fAngle + 90);
-                fDeltaY = -300 * MathUtils.sin(fAngle + 90);
+                fDeltaX = 300 * MathUtils.cos((float) (fAngle + 1.5708));
+                fDeltaY = 300 * MathUtils.sin((float) (fAngle + 1.5708));
                 break;
             case 3:
-                fDeltaX = -300 * MathUtils.cos(fAngle -90);
-                fDeltaY = -300 * MathUtils.sin(fAngle - 90);
+                fDeltaX = 300 * MathUtils.cos((float) (fAngle - 1.5708));
+                fDeltaY = 300 * MathUtils.sin((float) (fAngle - 1.5708));
         }
-        System.out.println(Math.toDegrees(fAngle));
     }
 
     public void setDeltaX(float value) {

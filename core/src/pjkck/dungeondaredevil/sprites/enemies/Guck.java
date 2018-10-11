@@ -39,6 +39,8 @@ public class Guck extends Enemy {
         if(new Random().nextInt(4) == 3){
             setY(getY() + 100 * Gdx.graphics.getDeltaTime());
         }
+
+
     }
 
     @Override

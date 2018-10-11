@@ -95,6 +95,7 @@ public class ScrGame implements Screen {
             float fEStartX = e.getX();
             float fEStartY = e.getY();
 
+            e.update(Gdx.graphics.getDeltaTime());
             if (collisionHandler.isColliding(e, 2)) {
                 e.setPosition(fStartX, fStartY);
             }
@@ -130,7 +131,6 @@ public class ScrGame implements Screen {
                 }
             }
 
-            e.update(Gdx.graphics.getDeltaTime());
         }
 
         if (collisionHandler.isColliding(player, 2)) {

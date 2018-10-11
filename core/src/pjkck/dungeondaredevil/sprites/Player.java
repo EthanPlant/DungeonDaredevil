@@ -109,7 +109,8 @@ public class Player extends Sprite {
 
     public void walk(Vector3 vMousePos, int nDirection) {
         float fAngle = MathUtils.atan2((vMousePos.y - getY()), (vMousePos.x - getX()));
-        setRotation((float) (Math.toDegrees(fAngle) - 90));
+        System.out.println(fAngle);
+        setImageBasedOnRotation(fAngle);
         switch (nDirection) {
             case 0:
                 fDeltaX = 300 * MathUtils.cos(fAngle);
@@ -126,6 +127,18 @@ public class Player extends Sprite {
             case 3:
                 fDeltaX = 300 * MathUtils.cos((float) (fAngle - 1.5708));
                 fDeltaY = 300 * MathUtils.sin((float) (fAngle - 1.5708));
+        }
+    }
+
+    private void setImageBasedOnRotation(float fAngle) {
+        if (fAngle <=  2 && fAngle >= 1) {
+            setRegion(arWalkingAnimations[1].getKeyFrame(fElapsedTime, true));
+        } else if (fAngle <= 1 && fAngle >= -1) {
+            setRegion(arWalkingAnimations[2].getKeyFrame(fElapsedTime, true));
+        } else if (fAngle <= -1 && fAngle >= -2) {
+            setRegion(arWalkingAnimations[0].getKeyFrame(fElapsedTime, true));
+        } else {
+            setRegion(arWalkingAnimations[3].getKeyFrame(fElapsedTime, true));
         }
     }
 
@@ -157,43 +170,5 @@ public class Player extends Sprite {
         fElapsedTime += delta;
 
         setPosition(getX() + fDeltaX * Gdx.graphics.getDeltaTime(), getY() + fDeltaY * Gdx.graphics.getDeltaTime());
-
-        if (fDeltaX != 0 | fDeltaY != 0) {
-            setState(STATE.WALKING);
-        } else {
-            setState(STATE.STANDING);
-        }
-
-        if (state == STATE.STANDING || state == STATE.DASHING) {
-            switch (direction) {
-                case FORWARD:
-                    setRegion(arWalkingAnimations[0].getKeyFrame(0));
-                    break;
-                case BACKWARD:
-                    setRegion(arWalkingAnimations[1].getKeyFrame(0));
-                    break;
-                case RIGHT:
-                    setRegion(arWalkingAnimations[2].getKeyFrame(0));
-                    break;
-                case LEFT:
-                    setRegion(arWalkingAnimations[3].getKeyFrame(0));
-                    break;
-            }
-        } else {
-            switch (direction) {
-                case FORWARD:
-                    setRegion(arWalkingAnimations[0].getKeyFrame(fElapsedTime, true));
-                    break;
-                case BACKWARD:
-                    setRegion(arWalkingAnimations[1].getKeyFrame(fElapsedTime, true));
-                    break;
-                case RIGHT:
-                    setRegion(arWalkingAnimations[2].getKeyFrame(fElapsedTime, true));
-                    break;
-                case LEFT:
-                    setRegion(arWalkingAnimations[3].getKeyFrame(fElapsedTime, true));
-                    break;
-            }
-        }
     }
 }

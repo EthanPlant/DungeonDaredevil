@@ -18,7 +18,6 @@ import pjkck.dungeondaredevil.sprites.enemies.Enemy;
 import pjkck.dungeondaredevil.sprites.enemies.Guck;
 import pjkck.dungeondaredevil.utils.SpriteColisionHandler;
 import pjkck.dungeondaredevil.utils.TiledMapCollisionHandler;
-import java.util.Random;
 
 public class ScrGame implements Screen {
     private Player player;

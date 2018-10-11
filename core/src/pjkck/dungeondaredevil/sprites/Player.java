@@ -5,6 +5,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
 public class Player extends Sprite {
     public enum DIRECTION {
@@ -27,8 +31,7 @@ public class Player extends Sprite {
 
     private float fElapsedTime;
 
-    private float fDeltaX;
-    private float fDeltaY;
+    private Vector2 vVelocity;
 
     public Player(float fX, float fY) {
         super();
@@ -82,8 +85,7 @@ public class Player extends Sprite {
         setRegion(arWalkingAnimations[0].getKeyFrame(0));
         setBounds(fX, fY, 32, 32);
 
-        fDeltaX = 0;
-        fDeltaY  = 0;
+        vVelocity = Vector2.Zero;
     }
 
     public void dash() {
@@ -104,16 +106,43 @@ public class Player extends Sprite {
         setState(STATE.DASHING);
     }
 
-    public void setDeltaX(float value) {
-        fDeltaX = value;
+    public void walk(Vector3 vMousePos, int nDirection) {
+        float fAngle = MathUtils.atan2((vMousePos.y - getY()), (vMousePos.x - getX()));
+        System.out.println(fAngle);
+        setImageBasedOnRotation(fAngle);
+        switch (nDirection) {
+            case 0:
+                vVelocity = (new Vector2(300 * MathUtils.cos(fAngle), 300 * MathUtils.sin(fAngle)));
+                break;
+            case 1:
+                vVelocity = (new Vector2(-300 * MathUtils.cos(fAngle), -300 * MathUtils.sin(fAngle)));
+                break;
+            case 2:
+                vVelocity = (new Vector2(300 * MathUtils.cos((float) (fAngle + 1.5708)), 300 * MathUtils.sin((float) (fAngle + 1.5708))));
+                break;
+            case 3:
+                vVelocity = (new Vector2(300 * MathUtils.cos((float) (fAngle - 1.5708)), 300 * MathUtils.sin((float) (fAngle - 1.5708))));
+        }
     }
 
-    public void setDeltaY(float value) {
-        fDeltaY = value;
+    private void setImageBasedOnRotation(float fAngle) {
+        if (fAngle <=  2 && fAngle >= 1) {
+            setRegion(arWalkingAnimations[1].getKeyFrame(fElapsedTime, true));
+        } else if (fAngle <= 1 && fAngle >= -1) {
+            setRegion(arWalkingAnimations[2].getKeyFrame(fElapsedTime, true));
+        } else if (fAngle <= -1 && fAngle >= -2) {
+            setRegion(arWalkingAnimations[0].getKeyFrame(fElapsedTime, true));
+        } else {
+            setRegion(arWalkingAnimations[3].getKeyFrame(fElapsedTime, true));
+        }
     }
 
-    public void setDirection(DIRECTION direction) {
-        this.direction = direction;
+    public void setVelocity(Vector2 value) {
+        vVelocity = value;
+    }
+
+    public void setVelocity(float x, float y) {
+        setVelocity(new Vector2(x, y));
     }
 
     public void setState(STATE state) {
@@ -131,54 +160,6 @@ public class Player extends Sprite {
     public void update(float delta) {
         fElapsedTime += delta;
 
-        setPosition(getX() + fDeltaX * Gdx.graphics.getDeltaTime(), getY() + fDeltaY * Gdx.graphics.getDeltaTime());
-
-        if (fDeltaX != 0 | fDeltaY != 0) {
-            setState(STATE.WALKING);
-        } else {
-            setState(STATE.STANDING);
-        }
-
-        if (fDeltaY > 0) {
-            setDirection(DIRECTION.BACKWARD);
-        } else if (fDeltaY < 0) {
-            setDirection(DIRECTION.FORWARD);
-        } else if (fDeltaX > 0) {
-            setDirection(DIRECTION.RIGHT);
-        } else if (fDeltaX < 0) {
-            setDirection(DIRECTION.LEFT);
-        }
-
-        if (state == STATE.STANDING || state == STATE.DASHING) {
-            switch (direction) {
-                case FORWARD:
-                    setRegion(arWalkingAnimations[0].getKeyFrame(0));
-                    break;
-                case BACKWARD:
-                    setRegion(arWalkingAnimations[1].getKeyFrame(0));
-                    break;
-                case RIGHT:
-                    setRegion(arWalkingAnimations[2].getKeyFrame(0));
-                    break;
-                case LEFT:
-                    setRegion(arWalkingAnimations[3].getKeyFrame(0));
-                    break;
-            }
-        } else {
-            switch (direction) {
-                case FORWARD:
-                    setRegion(arWalkingAnimations[0].getKeyFrame(fElapsedTime, true));
-                    break;
-                case BACKWARD:
-                    setRegion(arWalkingAnimations[1].getKeyFrame(fElapsedTime, true));
-                    break;
-                case RIGHT:
-                    setRegion(arWalkingAnimations[2].getKeyFrame(fElapsedTime, true));
-                    break;
-                case LEFT:
-                    setRegion(arWalkingAnimations[3].getKeyFrame(fElapsedTime, true));
-                    break;
-            }
-        }
+        setPosition(getX() + vVelocity.x * Gdx.graphics.getDeltaTime(), getY() + vVelocity.y * Gdx.graphics.getDeltaTime());
     }
 }

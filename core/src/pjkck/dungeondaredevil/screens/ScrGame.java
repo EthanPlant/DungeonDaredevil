@@ -10,6 +10,8 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import pjkck.dungeondaredevil.GamDungeonDaredevil;
@@ -68,16 +70,17 @@ public class ScrGame implements Screen {
     }
 
     public void handleInput() {
-        player.setDeltaX(0);
-        player.setDeltaY(0);
+        player.setVelocity(Vector2.Zero);
+        Vector3 vMousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+        cam.unproject(vMousePos);
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            player.setDeltaY(300);
+            player.walk(vMousePos, 0);
         } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            player.setDeltaY(-300);
+            player.walk(vMousePos, 1);
         } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            player.setDeltaX(-300);
+            player.walk(vMousePos, 2);
         } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            player.setDeltaX(300);
+            player.walk(vMousePos, 3);
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             player.dash();

@@ -73,16 +73,19 @@ public class ScrGame implements Screen {
         Vector3 vMousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         cam.unproject(vMousePos);
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            player.walk(vMousePos, 0);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            player.walk(vMousePos, 1);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            player.walk(vMousePos, 2);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            player.walk(vMousePos, 3);
+            player.move(vMousePos, 0, 300);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+            player.move(vMousePos, 1, 300);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            player.move(vMousePos, 2, 300);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            player.move(vMousePos, 3, 300);
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            player.dash();
+            player.move(vMousePos, 0, 10000);
         }
     }
 
@@ -106,63 +109,12 @@ public class ScrGame implements Screen {
             if (spriteColisionHandler.isColliding(player, e)) {
                 e.setPosition(fEStartX, fEStartY);
 
-                if (player.getState() == Player.STATE.DASHING) {
-                    switch (player.getDirection()) {
-                        case FORWARD:
-                            while (spriteColisionHandler.isColliding(player, e)) {
-                                player.setY(player.getY() + 32);
-                            }
-                            break;
-                        case BACKWARD:
-                            while (spriteColisionHandler.isColliding(player, e)) {
-                                player.setY(player.getY() - 32);
-                            }
-                            break;
-                        case LEFT:
-                            while (spriteColisionHandler.isColliding(player, e)) {
-                                player.setX(player.getX() + 32);
-                            }
-                            break;
-                        case RIGHT:
-                            while (spriteColisionHandler.isColliding(player, e)) {
-                                player.setX(player.getX() - 32);
-                            }
-                            break;
-                    }
-                } else {
-                    player.setPosition(fStartX, fStartY);
-                }
+                player.setPosition(fStartX, fStartY);
             }
-
         }
 
         if (collisionHandler.isColliding(player, 2)) {
-            if (player.getState() == Player.STATE.DASHING) {
-                switch (player.getDirection()) {
-                    case FORWARD:
-                        while (collisionHandler.isColliding(player, 2)) {
-                            player.setY(player.getY() + 1);
-                        }
-                        break;
-                    case BACKWARD:
-                        while (collisionHandler.isColliding(player, 2)) {
-                            player.setY(player.getY() - 1);
-                        }
-                        break;
-                    case LEFT:
-                        while (collisionHandler.isColliding(player, 2)) {
-                            player.setX(player.getX() + 1);
-                        }
-                        break;
-                    case RIGHT:
-                        while (collisionHandler.isColliding(player, 2)) {
-                            player.setX(player.getX() - 1);
-                        }
-                        break;
-                }
-            } else {
-                player.setPosition(fStartX, fStartY);
-            }
+            player.setPosition(fStartX, fStartY);
         }
 
         cam.position.set(player.getX(), player.getY(), 0);
@@ -174,8 +126,8 @@ public class ScrGame implements Screen {
     public void render(float delta) {
         update();
 
-        Gdx.app.log("FPS", Integer.toString(Gdx.graphics.getFramesPerSecond()));
-        Gdx.app.log("DT", Float.toString(Gdx.graphics.getDeltaTime()));
+//        Gdx.app.log("FPS", Integer.toString(Gdx.graphics.getFramesPerSecond()));
+//        Gdx.app.log("DT", Float.toString(Gdx.graphics.getDeltaTime()));
 
         renderer.setView(cam);
 

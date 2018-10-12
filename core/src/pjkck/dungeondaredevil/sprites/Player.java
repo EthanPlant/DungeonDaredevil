@@ -1,6 +1,7 @@
 package pjkck.dungeondaredevil.sprites;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -111,5 +112,16 @@ public class Player extends Sprite {
         fElapsedTime += delta;
 
         setPosition(getX() + vVelocity.x * Gdx.graphics.getDeltaTime(), getY() + vVelocity.y * Gdx.graphics.getDeltaTime());
-    }
-}
+        // garbage
+       // if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+       //     if (System.currentTimeMillis() - lastShot >= FIRE_RATE) {
+        //        bullets.add(new Bullet(position.x + 6, position.y + 6, 4, 4, Gdx.input.getX() / 2, Gdx.input.getY() / 2));
+        //        lastShot = System.currentTimeMillis();
+            }
+        }
+       //     for (int i = 0; i < bullets.size(); i++) {
+        //        bullets.get(i).update(delta);
+        //    }
+       // }
+    //}
+

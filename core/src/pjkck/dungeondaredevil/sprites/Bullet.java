@@ -17,6 +17,7 @@ public class Bullet extends Sprite {
         vVelocity = Vector2.Zero;
 
         setPosition(x, y);
+        setOriginCenter();
         setBounds(x, y, 8,8);
     }
 

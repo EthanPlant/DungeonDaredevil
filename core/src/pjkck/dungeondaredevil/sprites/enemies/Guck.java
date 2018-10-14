@@ -12,7 +12,7 @@ public class Guck extends Enemy {
     public Guck(float fX, float fY) {
         super(fX, fY);
 
-        Texture txSpriteSheet = new Texture("guck.png");
+        Texture txSpriteSheet = new Texture("spritesheets/guck.png");
         TextureRegion[][] tmp = TextureRegion.split(txSpriteSheet, txSpriteSheet.getWidth() / 2, txSpriteSheet.getHeight());
 
         TextureRegion[] arFrames = new TextureRegion[2];

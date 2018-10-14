@@ -51,7 +51,7 @@ public class ScrGame implements Screen {
         cam.position.set(port.getWorldWidth() / 2, port.getWorldHeight() / 2, 0);
 
         mapLoader = new TmxMapLoader();
-        map = mapLoader.load("map.tmx");
+        map = mapLoader.load("maps/map.tmx");
         renderer = new OrthogonalTiledMapRenderer(map);
         collisionHandler = new TiledMapCollisionHandler(map);
 

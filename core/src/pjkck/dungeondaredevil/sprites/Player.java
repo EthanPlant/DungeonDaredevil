@@ -22,7 +22,7 @@ public class Player extends Sprite {
     public Player(float fX, float fY) {
         super();
 
-        Texture txSpritesheet = new Texture("player.png");
+        Texture txSpritesheet = new Texture("spritesheets/player.png");
         TextureRegion[][] tmp = TextureRegion.split(txSpritesheet, txSpritesheet.getWidth() / 4, txSpritesheet.getHeight() / 4);
 
         TextureRegion[] forwardFrames = new TextureRegion[4];
@@ -93,7 +93,7 @@ public class Player extends Sprite {
     }
 
     public void shoot(Vector3 vMousePos) {
-        Bullet b = new Bullet(getX(), getY(), new Texture("bullet.png"));
+        Bullet b = new Bullet(getX(), getY(), new Texture("textures/bullet.png"));
         b.setTargetPos(vMousePos.x, vMousePos.y);
         arBullets.add(b);
     }

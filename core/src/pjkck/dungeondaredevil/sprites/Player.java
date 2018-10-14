@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 
 public class Player extends Sprite {
 
@@ -15,6 +16,8 @@ public class Player extends Sprite {
     private float fElapsedTime;
 
     private Vector2 vVelocity;
+
+    private Array<Bullet> arBullets;
 
     public Player(float fX, float fY) {
         super();
@@ -62,6 +65,8 @@ public class Player extends Sprite {
         arWalkingAnimations[2] = new Animation<TextureRegion>(1 / 7f, rightFrames);
         arWalkingAnimations[3] = new Animation<TextureRegion>(1 / 7f, leftFrames);
 
+        arBullets = new Array<Bullet>();
+
         setRegion(arWalkingAnimations[0].getKeyFrame(0));
         setBounds(fX, fY, 32, 32);
 
@@ -87,6 +92,12 @@ public class Player extends Sprite {
         }
     }
 
+    public void shoot(Vector3 vMousePos) {
+        Bullet b = new Bullet(getX(), getY(), new Texture("bullet.png"));
+        b.setTargetPos(vMousePos.x, vMousePos.y);
+        arBullets.add(b);
+    }
+
     private void setImageBasedOnRotation(float fAngle) {
         if (fAngle <= 2 && fAngle >= 1) {
             setRegion(arWalkingAnimations[1].getKeyFrame(fElapsedTime, true));
@@ -107,8 +118,16 @@ public class Player extends Sprite {
         setVelocity(new Vector2(x, y));
     }
 
+    public Array<Bullet> getBullets() {
+        return  arBullets;
+    }
+
     public void update(float delta) {
         fElapsedTime += delta;
+
+        for (Bullet b : arBullets) {
+            b.update();
+        }
 
         setPosition(getX() + vVelocity.x * Gdx.graphics.getDeltaTime(), getY() + vVelocity.y * Gdx.graphics.getDeltaTime());
     }

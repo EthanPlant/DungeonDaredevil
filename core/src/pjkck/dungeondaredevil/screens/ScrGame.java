@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -15,6 +16,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import pjkck.dungeondaredevil.GamDungeonDaredevil;
+import pjkck.dungeondaredevil.sprites.Bullet;
 import pjkck.dungeondaredevil.sprites.Player;
 import pjkck.dungeondaredevil.sprites.enemies.Enemy;
 import pjkck.dungeondaredevil.sprites.enemies.Guck;
@@ -49,7 +51,7 @@ public class ScrGame implements Screen {
         cam.position.set(port.getWorldWidth() / 2, port.getWorldHeight() / 2, 0);
 
         mapLoader = new TmxMapLoader();
-        map = mapLoader.load("map.tmx");
+        map = mapLoader.load("maps/map.tmx");
         renderer = new OrthogonalTiledMapRenderer(map);
         collisionHandler = new TiledMapCollisionHandler(map);
 
@@ -57,7 +59,6 @@ public class ScrGame implements Screen {
         arEnemies = new Array<Guck>();
 
         spriteColisionHandler = new SpriteColisionHandler();
-
     }
 
 
@@ -86,6 +87,9 @@ public class ScrGame implements Screen {
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             player.move(vMousePos, 0, 10000);
+        }
+        if (Gdx.input.isTouched()) {
+            player.shoot(vMousePos);
         }
     }
 
@@ -139,6 +143,9 @@ public class ScrGame implements Screen {
         batch.setProjectionMatrix(cam.combined);
         batch.begin();
         player.draw(batch);
+        for (Bullet b : player.getBullets()) {
+            b.draw(batch);
+        }
         for (Enemy e : arEnemies) {
             e.draw(batch);
         }
@@ -168,6 +175,7 @@ public class ScrGame implements Screen {
     @Override
     public void dispose() {
         arEnemies.clear();
+        player.getBullets().clear();
         map.dispose();
     }
 }

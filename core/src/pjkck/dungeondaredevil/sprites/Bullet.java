@@ -1,28 +1,38 @@
 package pjkck.dungeondaredevil.sprites;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 public class Bullet extends Sprite {
 
-    private final int width;
-    private final int height;
-    private final Vector2 position;
-    public Vector2 velocity;
+    private Vector2 vTargetPos;
+    private Vector2 vVelocity;
 
-    public Bullet(float x, float y, int width, int height, float targetX, float targetY) {
-        this.width = width;
-        this.height = height;
-        position = new Vector2( x , y );
-        velocity = new Vector2( 0 , 0 );
-        velocity.set(targetX - position.x,targetY - position.y);
-        //velocity.set(targetX - position.x, targetY - position.y).nor().scl(Math.min(position.dst(targetX, targetY), speedMax));
-    }
-    public void update(float deltaTime) {
-        //position.add(position.x + speedMax * deltaTime * ax,position.y + speedMax * deltaTime * ay);
-        position.add(velocity.x * deltaTime, velocity.y * deltaTime);
-        //velocity.scl(1 - (0.98f * deltaTime));
-        // Linear dampening, otherwise the ball will keep going at the original velocity forever
+    public Bullet(float x, float y, Texture tex) {
+        super(tex);
+
+        vVelocity = Vector2.Zero;
+
+        setPosition(x, y);
+        setOriginCenter();
+        setBounds(x, y, 8,8);
     }
 
+    public void setTargetPos(Vector2 value) {
+        vTargetPos = value;
+        float fAngle = MathUtils.atan2(vTargetPos.y - getY(), vTargetPos.x - getX());
+        setRotation((float) Math.toDegrees(fAngle));
+        vVelocity = new Vector2(1000 * MathUtils.cos(fAngle), 1000 * MathUtils.sin(fAngle));
+    }
+
+    public void setTargetPos(float x, float y) {
+        setTargetPos(new Vector2(x, y));
+    }
+
+    public void update() {
+        setPosition(getX() + vVelocity.x * Gdx.graphics.getDeltaTime(), getY() + vVelocity.y * Gdx.graphics.getDeltaTime());
+    }
 }

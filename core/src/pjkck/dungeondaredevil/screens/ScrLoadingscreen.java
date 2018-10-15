@@ -28,7 +28,7 @@ public class ScrLoadingscreen implements Screen {
         cam.position.set(port.getWorldWidth()/2, port.getWorldHeight()/2, 0);
         this.game = game;
         this.batch = batch;
-        txImg = new Texture("LoadingScreen.png");
+        txImg = new Texture("textures/LoadingScreen.png");
 
         fElapsedTime = 0;
     }

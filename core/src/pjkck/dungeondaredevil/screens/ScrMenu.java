@@ -26,7 +26,7 @@ public class ScrMenu implements Screen {
             cam.position.set(port.getWorldWidth()/2, port.getWorldHeight()/2, 0);
             this.game = game;
             this.batch = batch;
-            txImg = new Texture("titlescreen.png");
+            txImg = new Texture("textures/titlescreen.png");
         }
 
     @Override

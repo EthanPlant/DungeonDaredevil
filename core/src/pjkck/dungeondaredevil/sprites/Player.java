@@ -15,15 +15,24 @@ import pjkck.dungeondaredevil.utils.Gun;
 
 public class Player extends Sprite {
 
+    private enum STATE {
+        STANDING,
+        WALKING
+    }
+
     private Animation<TextureRegion>[] arWalkingAnimations;
     private float fElapsedTime;
     private float fAttackCooldown;
+
+    private float fAngle;
 
     private Vector2 vVelocity;
 
     private Array<Bullet> arBullets;
 
     private Gun gun;
+
+    private STATE state;
 
     public Player(float fX, float fY) {
         super();
@@ -81,12 +90,15 @@ public class Player extends Sprite {
 
         Json json = new Json();
         gun = json.fromJson(Gun.class, Gdx.files.internal("json/testgun.json"));
+
+        state = STATE.STANDING;
     }
 
-    public void move(Vector3 vMousePos, int nDirection, float fSpeed) {
-        float fAngle = MathUtils.atan2((vMousePos.y - getY()), (vMousePos.x - getX()));
-        System.out.println(fAngle);
-        setImageBasedOnRotation(fAngle);
+    public void setAngle(Vector3 vMousePos) {
+        fAngle =  MathUtils.atan2((vMousePos.y - getY()), (vMousePos.x - getX()));
+    }
+
+    public void move(int nDirection, float fSpeed) {
         switch (nDirection) {
             case 0:
                 vVelocity = (new Vector2(fSpeed * MathUtils.cos(fAngle), 300 * MathUtils.sin(fAngle)));
@@ -138,6 +150,15 @@ public class Player extends Sprite {
     public void update(float delta) {
         fElapsedTime += delta;
         fAttackCooldown += delta;
+
+        if (vVelocity != Vector2.Zero) {
+            state = STATE.WALKING;
+        } else {
+            fElapsedTime = 0;
+            state = STATE.STANDING;
+        }
+
+        setImageBasedOnRotation(fAngle);
 
         for (Bullet b : arBullets) {
             b.update();

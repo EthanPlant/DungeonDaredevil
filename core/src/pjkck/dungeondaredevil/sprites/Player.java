@@ -10,15 +10,20 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
+import pjkck.dungeondaredevil.utils.Gun;
 
 public class Player extends Sprite {
 
     private Animation<TextureRegion>[] arWalkingAnimations;
     private float fElapsedTime;
+    private float fAttackCooldown;
 
     private Vector2 vVelocity;
 
     private Array<Bullet> arBullets;
+
+    private Gun gun;
 
     public Player(float fX, float fY) {
         super();
@@ -69,9 +74,13 @@ public class Player extends Sprite {
         arBullets = new Array<Bullet>();
 
         setRegion(arWalkingAnimations[0].getKeyFrame(0));
+        setOriginCenter();
         setBounds(fX, fY, 32, 32);
 
         vVelocity = Vector2.Zero;
+
+        Json json = new Json();
+        gun = json.fromJson(Gun.class, Gdx.files.internal("json/testgun.json"));
     }
 
     public void move(Vector3 vMousePos, int nDirection, float fSpeed) {
@@ -94,9 +103,12 @@ public class Player extends Sprite {
     }
 
     public void shoot(Vector3 vMousePos) {
-        Bullet b = new Bullet(getX(), getY(), new Texture("textures/bullet.png"));
-        b.setTargetPos(vMousePos.x, vMousePos.y);
-        arBullets.add(b);
+        if (fAttackCooldown >= 1 / gun.getAttackSpeed()) {
+            Bullet b = new Bullet(getX(), getY(), new Texture("textures/bullet.png"), gun.getBulletSpeed());
+            b.setTargetPos(vMousePos.x, vMousePos.y);
+            arBullets.add(b);
+            fAttackCooldown = 0;
+        }
     }
 
     private void setImageBasedOnRotation(float fAngle) {
@@ -125,9 +137,13 @@ public class Player extends Sprite {
 
     public void update(float delta) {
         fElapsedTime += delta;
+        fAttackCooldown += delta;
 
         for (Bullet b : arBullets) {
             b.update();
+            if (b.findDistance(new Vector2(getX(), getY())) >= gun.getRange()) {
+                arBullets.removeValue(b, true);
+            }
         }
 
         setPosition(getX() + vVelocity.x * Gdx.graphics.getDeltaTime(), getY() + vVelocity.y * Gdx.graphics.getDeltaTime());

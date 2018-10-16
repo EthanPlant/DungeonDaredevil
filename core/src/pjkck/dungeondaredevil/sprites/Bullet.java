@@ -11,10 +11,13 @@ public class Bullet extends Sprite {
     private Vector2 vTargetPos;
     private Vector2 vVelocity;
 
-    public Bullet(float x, float y, Texture tex) {
+    private float fSpeed;
+
+    public Bullet(float x, float y, Texture tex, float fSpeed) {
         super(tex);
 
         vVelocity = Vector2.Zero;
+        this.fSpeed = fSpeed;
 
         setPosition(x, y);
         setOriginCenter();
@@ -25,7 +28,7 @@ public class Bullet extends Sprite {
         vTargetPos = value;
         float fAngle = MathUtils.atan2(vTargetPos.y - getY(), vTargetPos.x - getX());
         setRotation((float) Math.toDegrees(fAngle));
-        vVelocity = new Vector2(1000 * MathUtils.cos(fAngle), 1000 * MathUtils.sin(fAngle));
+        vVelocity = new Vector2(fSpeed * MathUtils.cos(fAngle), fSpeed * MathUtils.sin(fAngle));
     }
 
     public void setTargetPos(float x, float y) {
@@ -34,5 +37,9 @@ public class Bullet extends Sprite {
 
     public void update() {
         setPosition(getX() + vVelocity.x * Gdx.graphics.getDeltaTime(), getY() + vVelocity.y * Gdx.graphics.getDeltaTime());
+    }
+
+    public float findDistance(Vector2 vPos) {
+        return (float) Math.sqrt(Math.pow((getX() - vPos.x), 2) + Math.pow((getY() - vPos.y), 2));
     }
 }

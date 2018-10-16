@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -66,6 +67,9 @@ public class ScrGame implements Screen {
     public void show() {
         for (int i = 0; i < 10; i++) {
             arEnemies.add(new Guck(MathUtils.random(64, 704), MathUtils.random(64, 672)));
+            Pixmap pm = new Pixmap(Gdx.files.internal("cursor.png"));
+            Gdx.graphics.setCursor(Gdx.graphics.newCursor(pm, 0, 0));
+            pm.dispose();
         }
     }
 

@@ -4,10 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 
 import java.util.Random;
 
 public class Guck extends Enemy {
+
+    private float fMoveCooldown;
+    private Vector2 vVelocity;
 
     public Guck(float fX, float fY) {
         super(fX, fY);
@@ -27,24 +31,34 @@ public class Guck extends Enemy {
 
     @Override
     public void move() {
-        if(new Random().nextInt(4) == 0){
-            setX(getX() - 100 * Gdx.graphics.getDeltaTime());
-        }
-        if(new Random().nextInt(4) == 1){
-            setY(getY() - 100 * Gdx.graphics.getDeltaTime());
-        }
-        if(new Random().nextInt(4) == 2){
-            setX(getX() + 100 * Gdx.graphics.getDeltaTime());
-        }
-        if(new Random().nextInt(4) == 3){
-            setY(getY() + 100 * Gdx.graphics.getDeltaTime());
-        }
+        vVelocity = Vector2.Zero;
+        fMoveCooldown += Gdx.graphics.getDeltaTime();
+        if (fMoveCooldown >= 1) {
+            fMoveCooldown = 0;
+            int nDir = new Random().nextInt(5);
+            if (nDir == 0) {
+                setX(getX() - 100 * Gdx.graphics.getDeltaTime());
+            }
+            if (nDir == 1) {
+                setY(getY() - 100 * Gdx.graphics.getDeltaTime());
+            }
+            if (nDir == 2) {
+                setX(getX() + 100 * Gdx.graphics.getDeltaTime());
+            }
+            if (nDir == 3) {
+                setY(getY() + 100 * Gdx.graphics.getDeltaTime());
+            }
 
-
+            if (nDir == 4) {
+                setX(getX());
+                setY(getY());
+            }
+        }
     }
 
     @Override
     public void update(float delta) {
+        fMoveCooldown += delta;
         move();
         fElapsedTime += delta;
         setRegion(animMovement.getKeyFrame(fElapsedTime, true));

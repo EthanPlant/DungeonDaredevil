@@ -95,7 +95,7 @@ public class Player extends Sprite {
     }
 
     public void setAngle(Vector3 vMousePos) {
-        fAngle =  MathUtils.atan2((vMousePos.y - getY()), (vMousePos.x - getX()));
+        fAngle = MathUtils.atan2((vMousePos.y - getY()), (vMousePos.x - getX()));
     }
 
     public void move(int nDirection, float fSpeed) {
@@ -144,7 +144,7 @@ public class Player extends Sprite {
     }
 
     public Array<Bullet> getBullets() {
-        return  arBullets;
+        return arBullets;
     }
 
     public void update(float delta) {
@@ -168,16 +168,6 @@ public class Player extends Sprite {
         }
 
         setPosition(getX() + vVelocity.x * Gdx.graphics.getDeltaTime(), getY() + vVelocity.y * Gdx.graphics.getDeltaTime());
-        // garbage
-       // if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-       //     if (System.currentTimeMillis() - lastShot >= FIRE_RATE) {
-        //        bullets.add(new Bullet(position.x + 6, position.y + 6, 4, 4, Gdx.input.getX() / 2, Gdx.input.getY() / 2));
-        //        lastShot = System.currentTimeMillis();
-            }
-        }
-       //     for (int i = 0; i < bullets.size(); i++) {
-        //        bullets.get(i).update(delta);
-        //    }
-       // }
-    //}
+    }
+}
 

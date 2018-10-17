@@ -1,6 +1,7 @@
 package pjkck.dungeondaredevil.sprites;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -14,15 +15,24 @@ import pjkck.dungeondaredevil.utils.Gun;
 
 public class Player extends Sprite {
 
+    private enum STATE {
+        STANDING,
+        WALKING
+    }
+
     private Animation<TextureRegion>[] arWalkingAnimations;
     private float fElapsedTime;
     private float fAttackCooldown;
+
+    private float fAngle;
 
     private Vector2 vVelocity;
 
     private Array<Bullet> arBullets;
 
     private Gun gun;
+
+    private STATE state;
 
     public Player(float fX, float fY) {
         super();
@@ -80,12 +90,15 @@ public class Player extends Sprite {
 
         Json json = new Json();
         gun = json.fromJson(Gun.class, Gdx.files.internal("json/testgun.json"));
+
+        state = STATE.STANDING;
     }
 
-    public void move(Vector3 vMousePos, int nDirection, float fSpeed) {
-        float fAngle = MathUtils.atan2((vMousePos.y - getY()), (vMousePos.x - getX()));
-        System.out.println(fAngle);
-        setImageBasedOnRotation(fAngle);
+    public void setAngle(Vector3 vMousePos) {
+        fAngle =  MathUtils.atan2((vMousePos.y - getY()), (vMousePos.x - getX()));
+    }
+
+    public void move(int nDirection, float fSpeed) {
         switch (nDirection) {
             case 0:
                 vVelocity = (new Vector2(fSpeed * MathUtils.cos(fAngle), 300 * MathUtils.sin(fAngle)));
@@ -138,6 +151,15 @@ public class Player extends Sprite {
         fElapsedTime += delta;
         fAttackCooldown += delta;
 
+        if (vVelocity != Vector2.Zero) {
+            state = STATE.WALKING;
+        } else {
+            fElapsedTime = 0;
+            state = STATE.STANDING;
+        }
+
+        setImageBasedOnRotation(fAngle);
+
         for (Bullet b : arBullets) {
             b.update();
             if (b.findDistance(new Vector2(getX(), getY())) >= gun.getRange()) {
@@ -146,5 +168,16 @@ public class Player extends Sprite {
         }
 
         setPosition(getX() + vVelocity.x * Gdx.graphics.getDeltaTime(), getY() + vVelocity.y * Gdx.graphics.getDeltaTime());
-    }
-}
+        // garbage
+       // if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+       //     if (System.currentTimeMillis() - lastShot >= FIRE_RATE) {
+        //        bullets.add(new Bullet(position.x + 6, position.y + 6, 4, 4, Gdx.input.getX() / 2, Gdx.input.getY() / 2));
+        //        lastShot = System.currentTimeMillis();
+            }
+        }
+       //     for (int i = 0; i < bullets.size(); i++) {
+        //        bullets.get(i).update(delta);
+        //    }
+       // }
+    //}
+

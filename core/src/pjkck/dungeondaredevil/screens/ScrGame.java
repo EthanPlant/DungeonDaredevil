@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -66,6 +67,9 @@ public class ScrGame implements Screen {
     public void show() {
         for (int i = 0; i < 10; i++) {
             arEnemies.add(new Guck(MathUtils.random(64, 704), MathUtils.random(64, 672)));
+            Pixmap pm = new Pixmap(Gdx.files.internal("cursor.png"));
+            Gdx.graphics.setCursor(Gdx.graphics.newCursor(pm, 0, 0));
+            pm.dispose();
         }
     }
 
@@ -73,20 +77,21 @@ public class ScrGame implements Screen {
         player.setVelocity(Vector2.Zero);
         Vector3 vMousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         cam.unproject(vMousePos);
+        player.setAngle(vMousePos);
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            player.move(vMousePos, 0, 300);
+            player.move(0, 300);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            player.move(vMousePos, 1, 300);
+            player.move(1, 300);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            player.move(vMousePos, 2, 300);
+            player.move(2, 300);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            player.move(vMousePos, 3, 300);
+            player.move(3, 300);
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            player.move(vMousePos, 0, 10000);
+            player.move(0, 10000);
         }
         if (Gdx.input.isTouched()) {
             player.shoot(vMousePos);
@@ -142,10 +147,10 @@ public class ScrGame implements Screen {
 
         batch.setProjectionMatrix(cam.combined);
         batch.begin();
-        player.draw(batch);
         for (Bullet b : player.getBullets()) {
             b.draw(batch);
         }
+        player.draw(batch);
         for (Enemy e : arEnemies) {
             e.draw(batch);
         }

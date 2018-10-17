@@ -4,6 +4,7 @@ public class Gun {
     private float bulletSpeed;
     private float attackSpeed;
     private float range;
+    private float spray;
 
     public float getBulletSpeed() {
         return bulletSpeed;
@@ -15,5 +16,9 @@ public class Gun {
 
     public float getRange() {
         return range;
+    }
+
+    public float getSpray() {
+        return spray;
     }
 }

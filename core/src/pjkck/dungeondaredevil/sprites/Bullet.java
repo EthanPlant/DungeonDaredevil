@@ -24,15 +24,22 @@ public class Bullet extends Sprite {
         setBounds(x, y, 8,8);
     }
 
-    public void setTargetPos(Vector2 value) {
+    public void setTargetPos(Vector2 value, float spray) {
         vTargetPos = value;
-        float fAngle = MathUtils.atan2(vTargetPos.y - getY(), vTargetPos.x - getX());
-        setRotation((float) Math.toDegrees(fAngle));
-        vVelocity = new Vector2(fSpeed * MathUtils.cos(fAngle), fSpeed * MathUtils.sin(fAngle));
+        float fAngle = (float) Math.toDegrees(MathUtils.atan2(vTargetPos.y - getY(), vTargetPos.x - getX()));
+        int nSprayChooser = MathUtils.random(100);
+        float fSprayAmount = MathUtils.random(spray);
+        if (nSprayChooser != 0 && nSprayChooser < 50) {
+            fAngle += fSprayAmount;
+        } else if (nSprayChooser >= 50) {
+            fAngle -= fSprayAmount;
+        }
+        setRotation(fAngle);
+        vVelocity = new Vector2(fSpeed * MathUtils.cos((float) Math.toRadians(fAngle)), fSpeed * MathUtils.sin((float) Math.toRadians(fAngle)));
     }
 
-    public void setTargetPos(float x, float y) {
-        setTargetPos(new Vector2(x, y));
+    public void setTargetPos(float x, float y, float spray) {
+        setTargetPos(new Vector2(x, y), spray);
     }
 
     public void update() {

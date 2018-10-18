@@ -89,7 +89,8 @@ public class Player extends Sprite {
         vVelocity = Vector2.Zero;
 
         Json json = new Json();
-        gun = json.fromJson(Gun.class, Gdx.files.internal("json/testgun.json"));
+        gun = json.fromJson(Gun.class, Gdx.files.internal("json/revolver.json"));
+        fAttackCooldown = gun.getAttackSpeed();
 
         state = STATE.STANDING;
     }

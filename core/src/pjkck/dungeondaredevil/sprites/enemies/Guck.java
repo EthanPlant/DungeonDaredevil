@@ -4,14 +4,19 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.Random;
 
+import static com.badlogic.gdx.math.MathUtils.random;
+
 public class Guck extends Enemy {
 
     private float fMoveCooldown;
-    private Vector2 vVelocity;
+    private Vector2 vVelocity = Vector2.Zero;
+    private float fSpeed = 75;
+    private float fAngle;
 
     public Guck(float fX, float fY) {
         super(fX, fY);
@@ -32,33 +37,14 @@ public class Guck extends Enemy {
     @Override
     public void move() {
         vVelocity = Vector2.Zero;
-        fMoveCooldown += Gdx.graphics.getDeltaTime();
-        if (fMoveCooldown >= 1) {
-            fMoveCooldown = 0;
-            int nDir = new Random().nextInt(5);
-            if (nDir == 0) {
-                setX(getX() - 100 * Gdx.graphics.getDeltaTime());
-            }
-            if (nDir == 1) {
-                setY(getY() - 100 * Gdx.graphics.getDeltaTime());
-            }
-            if (nDir == 2) {
-                setX(getX() + 100 * Gdx.graphics.getDeltaTime());
-            }
-            if (nDir == 3) {
-                setY(getY() + 100 * Gdx.graphics.getDeltaTime());
-            }
+        fAngle = MathUtils.random(0f, 6.28319f);
+                vVelocity = new Vector2(fSpeed * MathUtils.cos(fAngle), fSpeed * MathUtils.sin(fAngle));
+                setPosition(getX() + vVelocity.x * Gdx.graphics.getDeltaTime(), getY() + vVelocity.y * Gdx.graphics.getDeltaTime());
 
-            if (nDir == 4) {
-                setX(getX());
-                setY(getY());
-            }
         }
-    }
 
     @Override
     public void update(float delta) {
-        fMoveCooldown += delta;
         move();
         fElapsedTime += delta;
         setRegion(animMovement.getKeyFrame(fElapsedTime, true));

@@ -24,8 +24,10 @@ public class Bullet extends Sprite {
         setBounds(x, y, 8,8);
     }
 
+    // Set the location to shoot towards
     public void setTargetPos(Vector2 value, float spray) {
         vTargetPos = value;
+        // Calculate angle to target location
         float fAngle = (float) Math.toDegrees(MathUtils.atan2(vTargetPos.y - getY(), vTargetPos.x - getX()));
         int nSprayChooser = MathUtils.random(100);
         float fSprayAmount = MathUtils.random(spray);
@@ -35,6 +37,7 @@ public class Bullet extends Sprite {
             fAngle -= fSprayAmount;
         }
         setRotation(fAngle);
+        // Set velocity vector
         vVelocity = new Vector2(fSpeed * MathUtils.cos((float) Math.toRadians(fAngle)), fSpeed * MathUtils.sin((float) Math.toRadians(fAngle)));
     }
 
@@ -47,6 +50,7 @@ public class Bullet extends Sprite {
     }
 
     public float findDistance(Vector2 vPos) {
+        // Calculate distance between bullet and a point
         return (float) Math.sqrt(Math.pow((getX() - vPos.x), 2) + Math.pow((getY() - vPos.y), 2));
     }
 }

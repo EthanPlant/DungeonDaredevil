@@ -39,6 +39,7 @@ public class Guck extends Enemy {
 
     @Override
     public void move() {
+        // Move in a random direction
         vVelocity = Vector2.Zero;
         fAngle = MathUtils.random(0f, 6.28319f);
                 vVelocity = new Vector2(fSpeed * MathUtils.cos(fAngle), fSpeed * MathUtils.sin(fAngle));

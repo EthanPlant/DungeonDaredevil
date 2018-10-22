@@ -40,6 +40,7 @@ public class Player extends Sprite {
     public Player(float fX, float fY) {
         super();
 
+        // Create animation data from spritesheet
         Texture txSpritesheet = new Texture("spritesheets/player.png");
         TextureRegion[][] tmp = TextureRegion.split(txSpritesheet, txSpritesheet.getWidth() / 4, txSpritesheet.getHeight() / 4);
 
@@ -91,6 +92,7 @@ public class Player extends Sprite {
 
         vVelocity = Vector2.Zero;
 
+        // Create gun from JSON file
         Json json = new Json();
         gun = json.fromJson(Gun.class, Gdx.files.internal("json/revolver.json"));
         fAttackCooldown = gun.getAttackSpeed();

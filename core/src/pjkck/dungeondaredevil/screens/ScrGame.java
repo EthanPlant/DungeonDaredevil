@@ -44,10 +44,12 @@ public class ScrGame implements Screen {
         this.game = game;
         this.batch = batch;
 
+        // Set up camera
         cam = new OrthographicCamera();
         port = new FitViewport(640, 360, cam);
         cam.position.set(port.getWorldWidth() / 2, port.getWorldHeight() / 2, 0);
 
+        // Load the map
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("maps/map.tmx");
         renderer = new OrthogonalTiledMapRenderer(map);
@@ -60,19 +62,24 @@ public class ScrGame implements Screen {
 
     @Override
     public void show() {
+        // Spawn enemies
         for (int i = 0; i < 10; i++) {
             arEnemies.add(new Guck(MathUtils.random(64, 704), MathUtils.random(64, 672)));
-            Pixmap pm = new Pixmap(Gdx.files.internal("cursor.png"));
-            Gdx.graphics.setCursor(Gdx.graphics.newCursor(pm, 0, 0));
-            pm.dispose();
         }
+
+        // Set custom cursor
+        Pixmap pm = new Pixmap(Gdx.files.internal("cursor.png"));
+        Gdx.graphics.setCursor(Gdx.graphics.newCursor(pm, 0, 0));
+        pm.dispose();
     }
 
     public void handleInput() {
         player.setVelocity(Vector2.Zero);
+        // Get location of mouse cursor
         Vector3 vMousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         cam.unproject(vMousePos);
         player.setAngle(vMousePos);
+
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             player.move(0, 300);
         }
@@ -101,6 +108,7 @@ public class ScrGame implements Screen {
 
         player.update(Gdx.graphics.getDeltaTime());
 
+        // Update enemy location and check for collisions
         for (Enemy e : arEnemies) {
             float fEStartX = e.getX();
             float fEStartY = e.getY();
@@ -121,7 +129,7 @@ public class ScrGame implements Screen {
             player.setPosition(fStartX, fStartY);
         }
 
-        cam.position.set(player.getX(), player.getY(), 0);
+        cam.position.set(player.getX(), player.getY(), 0); // Set camera location to player's
 
         cam.update();
     }
@@ -138,8 +146,9 @@ public class ScrGame implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        renderer.render();
+        renderer.render(); // Draw the map
 
+        // Draw the sprites
         batch.setProjectionMatrix(cam.combined);
         batch.begin();
         for (Bullet b : player.getBullets()) {

@@ -49,6 +49,7 @@ public class ScrLoadingscreen implements Screen {
         batch.begin();
         batch.draw(txImg, 0, 0);
         batch.end();
+        // Show splash screen for 5 seconds than switch to menu
         if (fElapsedTime >= 5) {
             game.updateState(1);
             dispose();

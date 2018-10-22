@@ -14,6 +14,7 @@ public class CollisionHandler {
     }
 
     public boolean isCollidingWithMap(Rectangle rectHitbox, int nLayer) {
+        // Check if hitbox overlaps TiledMap Rectangle object
         for (MapObject object : map.getLayers().get(nLayer).getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
             if (rectHitbox.overlaps(rect)) {
@@ -25,6 +26,7 @@ public class CollisionHandler {
     }
 
     public boolean isSpriteColliding(Rectangle rectHitbox1, Rectangle rectHitbox2) {
+        // Check if two rectangles are overlapping
         return rectHitbox1.overlaps(rectHitbox2);
     }
 }

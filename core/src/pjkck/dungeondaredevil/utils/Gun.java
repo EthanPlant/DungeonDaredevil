@@ -1,6 +1,7 @@
 package pjkck.dungeondaredevil.utils;
 
 public class Gun {
+    // Gun attributes
     private float bulletSpeed;
     private float attackSpeed;
     private float range;

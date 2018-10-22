@@ -6,7 +6,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -21,8 +20,7 @@ import pjkck.dungeondaredevil.sprites.Bullet;
 import pjkck.dungeondaredevil.sprites.Player;
 import pjkck.dungeondaredevil.sprites.enemies.Enemy;
 import pjkck.dungeondaredevil.sprites.enemies.Guck;
-import pjkck.dungeondaredevil.utils.SpriteColisionHandler;
-import pjkck.dungeondaredevil.utils.TiledMapCollisionHandler;
+import pjkck.dungeondaredevil.utils.CollisionHandler;
 
 public class ScrGame implements Screen {
     private Player player;
@@ -37,9 +35,8 @@ public class ScrGame implements Screen {
     private TmxMapLoader mapLoader;
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
-    private TiledMapCollisionHandler collisionHandler;
 
-    private SpriteColisionHandler spriteColisionHandler;
+    private CollisionHandler collisionHandler;
 
     private SpriteBatch batch;
 
@@ -54,12 +51,10 @@ public class ScrGame implements Screen {
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("maps/map.tmx");
         renderer = new OrthogonalTiledMapRenderer(map);
-        collisionHandler = new TiledMapCollisionHandler(map);
+        collisionHandler = new CollisionHandler(map);
 
         player = new Player(port.getWorldWidth() / 2, port.getWorldHeight() / 2);
         arEnemies = new Array<Guck>();
-
-        spriteColisionHandler = new SpriteColisionHandler();
     }
 
 
@@ -111,18 +106,18 @@ public class ScrGame implements Screen {
             float fEStartY = e.getY();
 
             e.update(Gdx.graphics.getDeltaTime());
-            if (collisionHandler.isColliding(e, 2)) {
-                e.setPosition(fStartX, fStartY);
+            if (collisionHandler.isCollidingWithMap(e.getHitbox(), 2)) {
+                e.setPosition(fEStartX, fEStartY);
             }
 
-            if (spriteColisionHandler.isColliding(player, e)) {
+            if (collisionHandler.isSpriteColliding(player.getHitbox(), e.getHitbox())) {
                 e.setPosition(fEStartX, fEStartY);
 
                 player.setPosition(fStartX, fStartY);
             }
         }
 
-        if (collisionHandler.isColliding(player, 2)) {
+        if (collisionHandler.isCollidingWithMap(player.getHitbox(), 2)) {
             player.setPosition(fStartX, fStartY);
         }
 

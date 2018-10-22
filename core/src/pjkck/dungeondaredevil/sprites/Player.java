@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
@@ -33,6 +34,8 @@ public class Player extends Sprite {
     private Gun gun;
 
     private STATE state;
+
+    private Rectangle rectHitbox;
 
     public Player(float fX, float fY) {
         super();
@@ -93,6 +96,8 @@ public class Player extends Sprite {
         fAttackCooldown = gun.getAttackSpeed();
 
         state = STATE.STANDING;
+
+        rectHitbox = new Rectangle(getX() + 5, getY(), 27, 27);
     }
 
     public void setAngle(Vector3 vMousePos) {
@@ -148,6 +153,10 @@ public class Player extends Sprite {
         return arBullets;
     }
 
+    public Rectangle getHitbox() {
+        return rectHitbox;
+    }
+
     public void update(float delta) {
         fElapsedTime += delta;
         fAttackCooldown += delta;
@@ -169,6 +178,7 @@ public class Player extends Sprite {
         }
 
         setPosition(getX() + vVelocity.x * Gdx.graphics.getDeltaTime(), getY() + vVelocity.y * Gdx.graphics.getDeltaTime());
+        rectHitbox.setPosition(getX() + 5, getY());
     }
 }
 

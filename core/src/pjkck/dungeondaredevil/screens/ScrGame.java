@@ -118,6 +118,16 @@ public class ScrGame implements Screen {
                 e.setPosition(fEStartX, fEStartY);
             }
 
+            for (Bullet b : player.getBullets()) {
+                if (collisionHandler.isCollidingWithMap(b.getHitbox(), 2)) {
+                    player.getBullets().removeValue(b, true);
+                }
+
+                if (collisionHandler.isSpriteColliding(b.getHitbox(), e.getHitbox())) {
+                    player.getBullets().removeValue(b, true);
+                }
+            }
+
             if (collisionHandler.isSpriteColliding(player.getHitbox(), e.getHitbox())) {
                 e.setPosition(fEStartX, fEStartY);
 

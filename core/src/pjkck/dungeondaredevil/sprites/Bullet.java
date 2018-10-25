@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class Bullet extends Sprite {
@@ -12,6 +13,8 @@ public class Bullet extends Sprite {
     private Vector2 vVelocity;
 
     private float fSpeed;
+
+    private Rectangle rectHitbox;
 
     public Bullet(float x, float y, Texture tex, float fSpeed) {
         super(tex);
@@ -22,6 +25,7 @@ public class Bullet extends Sprite {
         setPosition(x, y);
         setOriginCenter();
         setBounds(x, y, 8,8);
+        rectHitbox = new Rectangle(getX(), getY() + 2, 8, 2);
     }
 
     // Set the location to shoot towards
@@ -45,8 +49,13 @@ public class Bullet extends Sprite {
         setTargetPos(new Vector2(x, y), spray);
     }
 
+    public Rectangle getHitbox() {
+        return rectHitbox;
+    }
+
     public void update() {
         setPosition(getX() + vVelocity.x * Gdx.graphics.getDeltaTime(), getY() + vVelocity.y * Gdx.graphics.getDeltaTime());
+        rectHitbox.setPosition(getX(), getY() + 2);
     }
 
     public float findDistance(Vector2 vPos) {

@@ -109,16 +109,16 @@ public class Player extends Sprite {
     public void move(int nDirection, float fSpeed) {
         switch (nDirection) {
             case 0:
-                vVelocity = (new Vector2(fSpeed * MathUtils.cos(fAngle), 300 * MathUtils.sin(fAngle)));
+                vVelocity = (new Vector2(0, 300));
                 break;
             case 1:
-                vVelocity = (new Vector2(-fSpeed * MathUtils.cos(fAngle), -300 * MathUtils.sin(fAngle)));
+                vVelocity = (new Vector2(0, -300));
                 break;
             case 2:
-                vVelocity = (new Vector2(fSpeed * MathUtils.cos((float) (fAngle + 1.5708)), 300 * MathUtils.sin((float) (fAngle + 1.5708))));
+                vVelocity = (new Vector2(-300, 0));
                 break;
             case 3:
-                vVelocity = (new Vector2(fSpeed * MathUtils.cos((float) (fAngle - 1.5708)), 300 * MathUtils.sin((float) (fAngle - 1.5708))));
+                vVelocity = (new Vector2(300, 0));
         }
     }
 

@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import pjkck.dungeondaredevil.sprites.Bullet;
 
 import java.util.Random;
 
@@ -45,13 +46,29 @@ public class Guck extends Enemy {
                 vVelocity = new Vector2(fSpeed * MathUtils.cos(fAngle), fSpeed * MathUtils.sin(fAngle));
                 setPosition(getX() + vVelocity.x * Gdx.graphics.getDeltaTime(), getY() + vVelocity.y * Gdx.graphics.getDeltaTime());
 
-        }
+    }
+
+    @Override
+    public void shoot() {
+        Bullet b = new Bullet(getX(), getY(), new Texture("textures/bullet.png"), gun.getBulletSpeed());
+        b.setTargetPos(MathUtils.random(1000), MathUtils.random(1000), gun.getSpray());
+        getBullets().add(b);
+    }
+
 
     @Override
     public void update(float delta) {
         move();
         fElapsedTime += delta;
+        fAttackCooldown += delta;
+        if (fAttackCooldown >= 1 / gun.getAttackSpeed()) {
+            shoot();
+            fAttackCooldown = 0;
+        }
         setRegion(animMovement.getKeyFrame(fElapsedTime, true));
+        for (Bullet b : getBullets()) {
+            b.update();
+        }
         rectHitbox.setPosition(getX() + 5, getY());
     }
 }

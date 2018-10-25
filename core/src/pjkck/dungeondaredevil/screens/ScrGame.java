@@ -128,6 +128,16 @@ public class ScrGame implements Screen {
                 }
             }
 
+            for (Bullet b : e.getBullets()) {
+                if (collisionHandler.isCollidingWithMap(b.getHitbox(), 2)) {
+                    e.getBullets().removeValue(b, true);
+                }
+
+                if (collisionHandler.isSpriteColliding(b.getHitbox(), player.getHitbox())) {
+                    e.getBullets().removeValue(b, true);
+                }
+            }
+
             if (collisionHandler.isSpriteColliding(player.getHitbox(), e.getHitbox())) {
                 e.setPosition(fEStartX, fEStartY);
 
@@ -148,7 +158,7 @@ public class ScrGame implements Screen {
     public void render(float delta) {
         update();
 
-//        Gdx.app.log("FPS", Integer.toString(Gdx.graphics.getFramesPerSecond()));
+        Gdx.app.log("FPS", Integer.toString(Gdx.graphics.getFramesPerSecond()));
 //        Gdx.app.log("DT", Float.toString(Gdx.graphics.getDeltaTime()));
 
         renderer.setView(cam);
@@ -167,6 +177,9 @@ public class ScrGame implements Screen {
         player.draw(batch);
         for (Enemy e : arEnemies) {
             e.draw(batch);
+            for (Bullet b : e.getBullets()) {
+                b.draw(batch);
+            }
         }
         batch.end();
     }

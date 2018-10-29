@@ -69,7 +69,7 @@ public class ScrGame implements Screen {
 
         // Set custom cursor
         Pixmap pm = new Pixmap(Gdx.files.internal("cursor.png"));
-        Gdx.graphics.setCursor(Gdx.graphics.newCursor(pm, 0, 0));
+        Gdx.graphics.setCursor(Gdx.graphics.newCursor(pm, 16, 16));
         pm.dispose();
     }
 

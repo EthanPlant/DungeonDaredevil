@@ -124,7 +124,7 @@ public class Player extends Sprite {
 
     public void shoot(Vector3 vMousePos) {
         if (fAttackCooldown >= 1 / gun.getAttackSpeed()) {
-            Bullet b = new Bullet(getX(), getY(), new Texture("textures/bullet.png"), gun.getBulletSpeed());
+            Bullet b = new Bullet(getX(), getY(), new Texture("textures/bullet.png"), gun.getBulletSpeed(), 8, 8, true);
             b.setTargetPos(vMousePos.x, vMousePos.y, gun.getSpray());
             arBullets.add(b);
             fAttackCooldown = 0;

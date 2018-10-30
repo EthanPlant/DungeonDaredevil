@@ -14,18 +14,19 @@ public class Bullet extends Sprite {
 
     private float fSpeed;
 
-    private Rectangle rectHitbox;
+    private boolean shouldRotate;
 
-    public Bullet(float x, float y, Texture tex, float fSpeed) {
+    public Bullet(float x, float y, Texture tex, float fSpeed, float width, float height, boolean shouldRotate) {
         super(tex);
+
+        this.shouldRotate = shouldRotate;
 
         vVelocity = Vector2.Zero;
         this.fSpeed = fSpeed;
 
         setPosition(x, y);
         setOriginCenter();
-        setBounds(x, y, 8,8);
-        rectHitbox = new Rectangle(getX(), getY() + 2, 8, 2);
+        setBounds(x, y, width,height);
     }
 
     // Set the location to shoot towards
@@ -40,7 +41,7 @@ public class Bullet extends Sprite {
         } else if (nSprayChooser >= 50) {
             fAngle -= fSprayAmount;
         }
-        setRotation(fAngle);
+        if (shouldRotate) setRotation(fAngle);
         // Set velocity vector
         vVelocity = new Vector2(fSpeed * MathUtils.cos((float) Math.toRadians(fAngle)), fSpeed * MathUtils.sin((float) Math.toRadians(fAngle)));
     }
@@ -53,13 +54,9 @@ public class Bullet extends Sprite {
         return vVelocity;
     }
 
-    public Rectangle getHitbox() {
-        return rectHitbox;
-    }
 
     public void update() {
         setPosition(getX() + vVelocity.x * Gdx.graphics.getDeltaTime(), getY() + vVelocity.y * Gdx.graphics.getDeltaTime());
-        rectHitbox.setPosition(getX(), getY() + 2);
     }
 
     public float findDistance(Vector2 vPos) {

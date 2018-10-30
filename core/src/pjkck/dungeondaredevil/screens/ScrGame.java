@@ -119,11 +119,11 @@ public class ScrGame implements Screen {
             }
 
             for (Bullet b : player.getBullets()) {
-                if (collisionHandler.isCollidingWithMap(b.getHitbox(), 2)) {
+                if (collisionHandler.isCollidingWithMap(b.getBoundingRectangle(), 2)) {
                     player.getBullets().removeValue(b, true);
                 }
 
-                if (collisionHandler.isSpriteColliding(b.getHitbox(), e.getHitbox())) {
+                if (collisionHandler.isSpriteColliding(b.getBoundingRectangle(), e.getHitbox())) {
                     player.getBullets().removeValue(b, true);
                 }
             }
@@ -133,11 +133,11 @@ public class ScrGame implements Screen {
                     b.setTargetPos(player.getX(), player.getY(), e.getGun().getSpray());
                 }
 
-                if (collisionHandler.isCollidingWithMap(b.getHitbox(), 2)) {
+                if (collisionHandler.isCollidingWithMap(b.getBoundingRectangle(), 2)) {
                     e.getBullets().removeValue(b, true);
                 }
 
-                if (collisionHandler.isSpriteColliding(b.getHitbox(), player.getHitbox())) {
+                if (collisionHandler.isSpriteColliding(b.getBoundingRectangle(), player.getHitbox())) {
                     e.getBullets().removeValue(b, true);
                 }
             }
@@ -153,7 +153,7 @@ public class ScrGame implements Screen {
             player.setPosition(fStartX, fStartY);
         }
 
-        cam.position.set(player.getX(), player.getY(), 0); // Set camera location to player's
+        cam.position.set(player.getX() + player.getWidth() / 2, player.getY() + player.getHeight() / 2, 0); // Set camera location to player's
 
         cam.update();
     }

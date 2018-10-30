@@ -55,7 +55,7 @@ public class Guck extends Enemy {
 
     @Override
     public void shoot() {
-        Bullet b = new Bullet(getX(), getY(), new Texture("textures/bullet.png"), gun.getBulletSpeed());
+        Bullet b = new Bullet(getX(), getY(), new Texture("textures/guckbullet.png"), gun.getBulletSpeed(), 16, 16, false);
         getBullets().add(b);
     }
 

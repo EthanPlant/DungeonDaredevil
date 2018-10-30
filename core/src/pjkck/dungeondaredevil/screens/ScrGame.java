@@ -129,6 +129,10 @@ public class ScrGame implements Screen {
             }
 
             for (Bullet b : e.getBullets()) {
+                if (b.getVelocity() == Vector2.Zero) {
+                    b.setTargetPos(player.getX(), player.getY(), e.getGun().getSpray());
+                }
+
                 if (collisionHandler.isCollidingWithMap(b.getHitbox(), 2)) {
                     e.getBullets().removeValue(b, true);
                 }

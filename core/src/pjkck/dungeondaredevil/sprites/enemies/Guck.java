@@ -7,7 +7,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Json;
 import pjkck.dungeondaredevil.sprites.Bullet;
+import pjkck.dungeondaredevil.utils.Gun;
 
 import java.util.Random;
 
@@ -22,6 +24,9 @@ public class Guck extends Enemy {
 
     public Guck(float fX, float fY) {
         super(fX, fY);
+
+        gun = new Json().fromJson(Gun.class, Gdx.files.internal("json/guck.json"));
+        fAttackCooldown = gun.getAttackSpeed();
 
         Texture txSpriteSheet = new Texture("spritesheets/guck.png");
         TextureRegion[][] tmp = TextureRegion.split(txSpriteSheet, txSpriteSheet.getWidth() / 2, txSpriteSheet.getHeight());
@@ -51,7 +56,6 @@ public class Guck extends Enemy {
     @Override
     public void shoot() {
         Bullet b = new Bullet(getX(), getY(), new Texture("textures/bullet.png"), gun.getBulletSpeed());
-        b.setTargetPos(MathUtils.random(1000), MathUtils.random(1000), gun.getSpray());
         getBullets().add(b);
     }
 

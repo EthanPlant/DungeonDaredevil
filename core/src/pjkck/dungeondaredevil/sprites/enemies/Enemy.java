@@ -37,6 +37,9 @@ public abstract class Enemy extends Sprite {
     public Array<Bullet> getBullets() {
         return arBullets;
     }
+    public Gun getGun() {
+        return gun;
+    }
 
     public abstract void move();
 

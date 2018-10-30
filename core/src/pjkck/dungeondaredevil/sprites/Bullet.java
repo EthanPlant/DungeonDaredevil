@@ -49,6 +49,10 @@ public class Bullet extends Sprite {
         setTargetPos(new Vector2(x, y), spray);
     }
 
+    public Vector2 getVelocity() {
+        return vVelocity;
+    }
+
     public Rectangle getHitbox() {
         return rectHitbox;
     }

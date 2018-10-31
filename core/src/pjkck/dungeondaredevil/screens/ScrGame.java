@@ -108,7 +108,7 @@ public class ScrGame implements Screen {
         else if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             player.move(0, 10000);
         }
-        else if (Gdx.input.isTouched()) {
+        if (Gdx.input.isTouched()) {
             player.shoot(vMousePos);
         }
     }

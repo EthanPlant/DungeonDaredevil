@@ -121,16 +121,16 @@ public class Player extends Sprite {
                 vVelocity = (new Vector2(300, 0));
                 break;
             case 4:
-                vVelocity = (new Vector2(300, 300));
+                vVelocity = (new Vector2(200, 200));
                 break;
             case 5:
-                vVelocity = (new Vector2(-300, 300));
+                vVelocity = (new Vector2(-200, 200));
                 break;
             case 6:
-                vVelocity = (new Vector2(300, -300));
+                vVelocity = (new Vector2(200, -200));
                 break;
             case 7:
-                vVelocity = (new Vector2(-300, -300));
+                vVelocity = (new Vector2(-200, -200));
                 break;
         }
     }

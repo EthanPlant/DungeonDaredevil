@@ -1,8 +1,8 @@
 package pjkck.dungeondaredevil;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import pjkck.dungeondaredevil.screens.ScrLoadingscreen;
 import pjkck.dungeondaredevil.screens.ScrGame;
 import pjkck.dungeondaredevil.screens.ScrMenu;

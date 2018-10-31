@@ -8,12 +8,9 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Json;
+
 import pjkck.dungeondaredevil.sprites.Bullet;
 import pjkck.dungeondaredevil.utils.Gun;
-
-import java.util.Random;
-
-import static com.badlogic.gdx.math.MathUtils.random;
 
 public class Guck extends Enemy {
 

@@ -25,7 +25,7 @@ public class Bullet extends Sprite {
 
         setPosition(x, y);
         setOriginCenter();
-        setBounds(x, y, width,height);
+        setBounds(x, y, width, height);
     }
 
     // Set the location to shoot towards

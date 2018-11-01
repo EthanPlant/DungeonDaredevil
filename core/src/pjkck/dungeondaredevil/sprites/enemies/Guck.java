@@ -33,7 +33,7 @@ public class Guck extends Enemy {
             arFrames[i] = tmp[0][i];
         }
 
-        animMovement = new Animation<TextureRegion>(1/5f, arFrames);
+        animMovement = new Animation<TextureRegion>(1 / 5f, arFrames);
 
         setRegion(animMovement.getKeyFrame(0));
 
@@ -45,8 +45,8 @@ public class Guck extends Enemy {
         // Move in a random direction
         vVelocity = Vector2.Zero;
         fAngle = MathUtils.random(0f, 6.28319f);
-                vVelocity = new Vector2(fSpeed * MathUtils.cos(fAngle), fSpeed * MathUtils.sin(fAngle));
-                setPosition(getX() + vVelocity.x * Gdx.graphics.getDeltaTime(), getY() + vVelocity.y * Gdx.graphics.getDeltaTime());
+        vVelocity = new Vector2(fSpeed * MathUtils.cos(fAngle), fSpeed * MathUtils.sin(fAngle));
+        setPosition(getX() + vVelocity.x * Gdx.graphics.getDeltaTime(), getY() + vVelocity.y * Gdx.graphics.getDeltaTime());
 
     }
 

@@ -13,20 +13,15 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import pjkck.dungeondaredevil.GamDungeonDaredevil;
 import pjkck.dungeondaredevil.sprites.Bullet;
 import pjkck.dungeondaredevil.sprites.Player;
-import pjkck.dungeondaredevil.sprites.enemies.Enemy;
-import pjkck.dungeondaredevil.sprites.enemies.Guck;
 import pjkck.dungeondaredevil.utils.CollisionHandler;
 
 public class ScrGame implements Screen {
     private Player player;
-
-    private Array<Guck> arEnemies;
 
     private GamDungeonDaredevil game;
 
@@ -57,17 +52,11 @@ public class ScrGame implements Screen {
         collisionHandler = new CollisionHandler(map);
 
         player = new Player(port.getWorldWidth() / 2, port.getWorldHeight() / 2);
-        arEnemies = new Array<Guck>();
     }
 
 
     @Override
     public void show() {
-        // Spawn enemies
-        for (int i = 0; i < 10; i++) {
-            arEnemies.add(new Guck(MathUtils.random(64, 704), MathUtils.random(64, 672)));
-        }
-
         // Set custom cursor
         Pixmap pm = new Pixmap(Gdx.files.internal("cursor.png"));
         Gdx.graphics.setCursor(Gdx.graphics.newCursor(pm, 16, 16));
@@ -123,43 +112,9 @@ public class ScrGame implements Screen {
         player.update(Gdx.graphics.getDeltaTime());
 
         // Update enemy location and check for collisions
-        for (Enemy e : arEnemies) {
-            float fEStartX = e.getX();
-            float fEStartY = e.getY();
-
-            e.update(Gdx.graphics.getDeltaTime());
-            if (collisionHandler.isCollidingWithMap(e.getHitbox(), 2)) {
-                e.setPosition(fEStartX, fEStartY);
-            }
-
-            for (Bullet b : player.getBullets()) {
-                if (collisionHandler.isCollidingWithMap(b.getBoundingRectangle(), 2)) {
-                    player.getBullets().removeValue(b, true);
-                }
-
-                if (collisionHandler.isSpriteColliding(b.getBoundingRectangle(), e.getHitbox())) {
-                    player.getBullets().removeValue(b, true);
-                }
-            }
-
-            for (Bullet b : e.getBullets()) {
-                if (b.getVelocity() == Vector2.Zero) {
-                    b.setTargetPos(player.getX(), player.getY(), e.getGun().getSpray());
-                }
-
-                if (collisionHandler.isCollidingWithMap(b.getBoundingRectangle(), 2)) {
-                    e.getBullets().removeValue(b, true);
-                }
-
-                if (collisionHandler.isSpriteColliding(b.getBoundingRectangle(), player.getHitbox())) {
-                    e.getBullets().removeValue(b, true);
-                }
-            }
-
-            if (collisionHandler.isSpriteColliding(player.getHitbox(), e.getHitbox())) {
-                e.setPosition(fEStartX, fEStartY);
-
-                player.setPosition(fStartX, fStartY);
+        for (Bullet b : player.getBullets()) {
+            if (collisionHandler.isCollidingWithMap(b.getBoundingRectangle(), 2)) {
+                player.getBullets().removeValue(b, true);
             }
         }
 
@@ -193,12 +148,6 @@ public class ScrGame implements Screen {
             b.draw(batch);
         }
         player.draw(batch);
-        for (Enemy e : arEnemies) {
-            e.draw(batch);
-            for (Bullet b : e.getBullets()) {
-                b.draw(batch);
-            }
-        }
         batch.end();
     }
 
@@ -224,7 +173,6 @@ public class ScrGame implements Screen {
 
     @Override
     public void dispose() {
-        arEnemies.clear();
         player.getBullets().clear();
         map.dispose();
     }

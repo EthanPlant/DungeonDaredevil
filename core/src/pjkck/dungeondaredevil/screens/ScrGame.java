@@ -59,8 +59,8 @@ public class ScrGame implements Screen {
         player = new Player(port.getWorldWidth() / 2, port.getWorldHeight() / 2);
 
         stage = new Stage();
-        healthBar = new HealthBar(100, 10, player.getMaxHealth());
-        healthBar.setPosition(10, Gdx.graphics.getHeight() - 20);
+        healthBar = new HealthBar(500, 20, player.getMaxHealth());
+        healthBar.setPosition(100, 10);
         stage.addActor(healthBar);
     }
 

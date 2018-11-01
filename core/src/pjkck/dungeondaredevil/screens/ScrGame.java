@@ -10,14 +10,15 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import pjkck.dungeondaredevil.GamDungeonDaredevil;
 import pjkck.dungeondaredevil.sprites.Bullet;
 import pjkck.dungeondaredevil.sprites.Player;
+import pjkck.dungeondaredevil.ui.HealthBar;
 import pjkck.dungeondaredevil.utils.CollisionHandler;
 
 public class ScrGame implements Screen {
@@ -36,6 +37,10 @@ public class ScrGame implements Screen {
 
     private SpriteBatch batch;
 
+    private Stage stage;
+    private HealthBar healthBar;
+    private float fElapsedTime;
+
     public ScrGame(GamDungeonDaredevil game, SpriteBatch batch) {
         this.game = game;
         this.batch = batch;
@@ -52,6 +57,11 @@ public class ScrGame implements Screen {
         collisionHandler = new CollisionHandler(map);
 
         player = new Player(port.getWorldWidth() / 2, port.getWorldHeight() / 2);
+
+        stage = new Stage();
+        healthBar = new HealthBar(100, 10, player.getMaxHealth());
+        healthBar.setPosition(10, Gdx.graphics.getHeight() - 20);
+        stage.addActor(healthBar);
     }
 
 
@@ -69,7 +79,6 @@ public class ScrGame implements Screen {
         Vector3 vMousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         cam.unproject(vMousePos);
         player.setAngle(vMousePos);
-
 
         if( Gdx.input.isKeyPressed(Input.Keys.W) && Gdx.input.isKeyPressed(Input.Keys.D)) {
             player.move(4, 300);
@@ -105,11 +114,14 @@ public class ScrGame implements Screen {
 
     public void update() {
         handleInput();
+        fElapsedTime += Gdx.graphics.getDeltaTime();
 
         float fStartX = player.getX();
         float fStartY = player.getY();
 
         player.update(Gdx.graphics.getDeltaTime());
+        player.setHealth(player.getHealth() - 10);
+        healthBar.setValue(player.getHealth());
 
         // Update enemy location and check for collisions
         for (Bullet b : player.getBullets()) {
@@ -148,7 +160,12 @@ public class ScrGame implements Screen {
             b.draw(batch);
         }
         player.draw(batch);
+
+        batch.setProjectionMatrix(stage.getCamera().combined);
         batch.end();
+        stage.getBatch().setProjectionMatrix(cam.combined);
+        stage.act(delta);
+        stage.draw();
     }
 
     @Override

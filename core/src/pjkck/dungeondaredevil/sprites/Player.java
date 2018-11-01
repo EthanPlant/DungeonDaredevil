@@ -25,6 +25,9 @@ public class Player extends Sprite {
     private float fElapsedTime;
     private float fAttackCooldown;
 
+    private float fMaxHealth;
+    private float fHealth;
+
     private float fAngle;
 
     private Vector2 vVelocity;
@@ -100,6 +103,8 @@ public class Player extends Sprite {
         state = STATE.STANDING;
 
         rectHitbox = new Rectangle(getX() + 5, getY(), 27, 27);
+        fMaxHealth = 1000;
+        fHealth = fMaxHealth;
     }
 
     public void setAngle(Vector3 vMousePos) {
@@ -164,12 +169,24 @@ public class Player extends Sprite {
         setVelocity(new Vector2(x, y));
     }
 
+    public void setHealth(float value) {
+        fHealth = value;
+    }
+
     public Array<Bullet> getBullets() {
         return arBullets;
     }
 
     public Rectangle getHitbox() {
         return rectHitbox;
+    }
+
+    public float getMaxHealth() {
+        return fMaxHealth;
+    }
+
+    public float getHealth() {
+        return fHealth;
     }
 
     public void update(float delta) {

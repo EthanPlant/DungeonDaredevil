@@ -23,6 +23,8 @@ public abstract class Enemy extends Sprite {
     protected float fAttackCooldown;
     private Array<Bullet> arBullets;
 
+    private float fHealth;
+
     public Enemy(float fX, float fY) {
         super();
         setPosition(fX, fY);
@@ -40,6 +42,13 @@ public abstract class Enemy extends Sprite {
     }
     public Gun getGun() {
         return gun;
+    }
+    public float getHealth() {
+        return  fHealth;
+    }
+
+    public void setHealth(float value) {
+        fHealth += value;
     }
 
     public abstract void move();

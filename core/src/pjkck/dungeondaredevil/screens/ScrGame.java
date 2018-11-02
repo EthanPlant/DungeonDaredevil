@@ -141,6 +141,7 @@ public class ScrGame implements Screen {
 
                 if (collisionHandler.isSpriteColliding(b.getBoundingRectangle(), e.getHitbox())) {
                     player.getBullets().removeValue(b, true);
+                    e.setHealth(-10);
                 }
             }
 
@@ -163,6 +164,10 @@ public class ScrGame implements Screen {
                 e.setPosition(fEStartX, fEStartY);
 
                 player.setPosition(fStartX, fStartY);
+            }
+
+            if (e.getHealth() <= 0) {
+                arEnemies.removeValue((Guck) e, true);
             }
         }
 

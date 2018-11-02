@@ -38,6 +38,8 @@ public class Guck extends Enemy {
         setRegion(animMovement.getKeyFrame(0));
 
         rectHitbox = new Rectangle(getX() + 5, getY(), 27, 15);
+
+        setHealth(100);
     }
 
     @Override

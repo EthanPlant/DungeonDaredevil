@@ -13,6 +13,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
@@ -21,6 +22,7 @@ import pjkck.dungeondaredevil.sprites.Bullet;
 import pjkck.dungeondaredevil.sprites.Player;
 import pjkck.dungeondaredevil.sprites.enemies.Enemy;
 import pjkck.dungeondaredevil.sprites.enemies.Guck;
+import pjkck.dungeondaredevil.ui.HealthBar;
 import pjkck.dungeondaredevil.utils.CollisionHandler;
 
 public class ScrGame implements Screen {
@@ -41,6 +43,9 @@ public class ScrGame implements Screen {
 
     private SpriteBatch batch;
 
+    private Stage stage;
+    private HealthBar healthBar;
+
     public ScrGame(GamDungeonDaredevil game, SpriteBatch batch) {
         this.game = game;
         this.batch = batch;
@@ -58,6 +63,11 @@ public class ScrGame implements Screen {
 
         player = new Player(port.getWorldWidth() / 2, port.getWorldHeight() / 2);
         arEnemies = new Array<Guck>();
+
+        stage = new Stage();
+        healthBar = new HealthBar(500, 20, player.getMaxHealth());
+        healthBar.setPosition(port.getWorldWidth() / 2 - 250, 10);
+        stage.addActor(healthBar);
     }
 
 
@@ -145,6 +155,7 @@ public class ScrGame implements Screen {
 
                 if (collisionHandler.isSpriteColliding(b.getBoundingRectangle(), player.getHitbox())) {
                     e.getBullets().removeValue(b, true);
+                    player.setHealth(-10);
                 }
             }
 
@@ -158,6 +169,9 @@ public class ScrGame implements Screen {
         if (collisionHandler.isCollidingWithMap(player.getHitbox(), 2)) {
             player.setPosition(fStartX, fStartY);
         }
+
+        healthBar.setValue(player.getHealth());
+
 
         cam.position.set(player.getX() + player.getWidth() / 2, player.getY() + player.getHeight() / 2, 0); // Set camera location to player's
 
@@ -192,6 +206,9 @@ public class ScrGame implements Screen {
             }
         }
         batch.end();
+        stage.getBatch().setProjectionMatrix(cam.combined);
+        stage.act(delta);
+        stage.draw();
     }
 
     @Override

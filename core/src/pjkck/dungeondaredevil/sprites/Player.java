@@ -37,6 +37,9 @@ public class Player extends Sprite {
 
     private Rectangle rectHitbox;
 
+    private float fMaxHealth;
+    private float fHealth;
+
     public Player(float fX, float fY) {
         super();
 
@@ -100,6 +103,8 @@ public class Player extends Sprite {
         state = STATE.STANDING;
 
         rectHitbox = new Rectangle(getX() + 5, getY(), 27, 27);
+
+        fHealth = fMaxHealth = 1000;
     }
 
     public void setAngle(Vector3 vMousePos) {
@@ -170,6 +175,18 @@ public class Player extends Sprite {
 
     public Rectangle getHitbox() {
         return rectHitbox;
+    }
+
+    public float getMaxHealth() {
+        return fMaxHealth;
+    }
+
+    public float getHealth() {
+        return fHealth;
+    }
+
+    public void setHealth(float value) {
+        fHealth += value;
     }
 
     public void update(float delta) {

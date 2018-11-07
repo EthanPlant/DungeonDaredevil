@@ -37,6 +37,8 @@ public class Player extends Sprite {
 
     private Rectangle rectHitbox;
 
+    private int nDir;
+
     private float fMaxHealth;
     private float fHealth;
 
@@ -112,30 +114,31 @@ public class Player extends Sprite {
     }
 
     public void move(int nDirection, float fSpeed) {
+        nDir = nDirection;
         switch (nDirection) {
             case 0:
-                vVelocity = (new Vector2(0, 300));
+                vVelocity = (new Vector2(0, fSpeed));
                 break;
             case 1:
-                vVelocity = (new Vector2(0, -300));
+                vVelocity = (new Vector2(0, -fSpeed));
                 break;
             case 2:
-                vVelocity = (new Vector2(-300, 0));
+                vVelocity = (new Vector2(-fSpeed, 0));
                 break;
             case 3:
-                vVelocity = (new Vector2(300, 0));
+                vVelocity = (new Vector2(fSpeed, 0));
                 break;
             case 4:
-                vVelocity = (new Vector2(200, 200));
+                vVelocity = (new Vector2(fSpeed, fSpeed));
                 break;
             case 5:
-                vVelocity = (new Vector2(-200, 200));
+                vVelocity = (new Vector2(-fSpeed, fSpeed));
                 break;
             case 6:
-                vVelocity = (new Vector2(200, -200));
+                vVelocity = (new Vector2(fSpeed, -fSpeed));
                 break;
             case 7:
-                vVelocity = (new Vector2(-200, -200));
+                vVelocity = (new Vector2(-fSpeed, -fSpeed));
                 break;
         }
     }
@@ -169,6 +172,10 @@ public class Player extends Sprite {
         setVelocity(new Vector2(x, y));
     }
 
+    public void setHealth(float value) {
+        fHealth += value;
+    }
+
     public Array<Bullet> getBullets() {
         return arBullets;
     }
@@ -185,8 +192,8 @@ public class Player extends Sprite {
         return fHealth;
     }
 
-    public void setHealth(float value) {
-        fHealth += value;
+    public int getDir() {
+        return nDir;
     }
 
     public void update(float delta) {
@@ -213,4 +220,3 @@ public class Player extends Sprite {
         rectHitbox.setPosition(getX() + 5, getY());
     }
 }
-

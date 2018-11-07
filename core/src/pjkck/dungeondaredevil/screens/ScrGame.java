@@ -64,15 +64,6 @@ public class ScrGame implements Screen {
         player = new Player(port.getWorldWidth() / 2, port.getWorldHeight() / 2);
         arEnemies = new Array<Guck>();
 
-        stage = new Stage();
-        healthBar = new HealthBar(500, 20, player.getMaxHealth());
-        healthBar.setPosition(port.getWorldWidth() / 2 - 250, 10);
-        stage.addActor(healthBar);
-    }
-
-
-    @Override
-    public void show() {
         // Spawn enemies
         for (int i = 0; i < 10; i++) {
             arEnemies.add(new Guck(MathUtils.random(64, 704), MathUtils.random(64, 672)));
@@ -82,6 +73,16 @@ public class ScrGame implements Screen {
         Pixmap pm = new Pixmap(Gdx.files.internal("cursor.png"));
         Gdx.graphics.setCursor(Gdx.graphics.newCursor(pm, 16, 16));
         pm.dispose();
+
+        stage = new Stage();
+        healthBar = new HealthBar(500, 20, player.getMaxHealth());
+        healthBar.setPosition(50, Gdx.graphics.getHeight() - 30);
+        stage.addActor(healthBar);
+    }
+
+
+    @Override
+    public void show() {
     }
 
     public void handleInput() {
@@ -93,13 +94,13 @@ public class ScrGame implements Screen {
 
 
         if (Gdx.input.isKeyPressed(Input.Keys.W) && Gdx.input.isKeyPressed(Input.Keys.D)) {
-            player.move(4, 300);
+            player.move(4, 200);
         } else if (Gdx.input.isKeyPressed(Input.Keys.W) && Gdx.input.isKeyPressed(Input.Keys.A)) {
-            player.move(5, 300);
+            player.move(5, 200);
         } else if (Gdx.input.isKeyPressed(Input.Keys.S) && Gdx.input.isKeyPressed(Input.Keys.D)) {
-            player.move(6, 300);
+            player.move(6, 200);
         } else if (Gdx.input.isKeyPressed(Input.Keys.S) && Gdx.input.isKeyPressed(Input.Keys.A)) {
-            player.move(7, 300);
+            player.move(7, 200);
         } else if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             player.move(0, 300);
         } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
@@ -108,8 +109,9 @@ public class ScrGame implements Screen {
             player.move(2, 300);
         } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             player.move(3, 300);
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            player.move(0, 10000);
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            player.move(player.getDir(), 3000);
         }
         if (Gdx.input.isTouched()) {
             player.shoot(vMousePos);
@@ -177,6 +179,9 @@ public class ScrGame implements Screen {
 
         healthBar.setValue(player.getHealth());
 
+        if (player.getHealth() <= 0) {
+            game.updateState(1);
+        }
 
         cam.position.set(player.getX() + player.getWidth() / 2, player.getY() + player.getHeight() / 2, 0); // Set camera location to player's
 

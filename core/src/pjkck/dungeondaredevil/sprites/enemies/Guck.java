@@ -15,6 +15,7 @@ import pjkck.dungeondaredevil.utils.Gun;
 public class Guck extends Enemy {
 
     private float fMoveCooldown;
+    private float fMoveTime;
     private Vector2 vVelocity = Vector2.Zero;
     private float fSpeed = 75;
     private float fAngle;
@@ -40,16 +41,29 @@ public class Guck extends Enemy {
         rectHitbox = new Rectangle(getX() + 5, getY(), 27, 15);
 
         setHealth(1);
+
+        fMoveCooldown = MathUtils.random();
+        fMoveTime = fMoveCooldown;
+        isPlayerInRange = false;
+
+        fRange = 100;
     }
 
     @Override
     public void move() {
-        // Move in a random direction
-        vVelocity = Vector2.Zero;
-        fAngle = MathUtils.random(0f, 6.28319f);
-        vVelocity = new Vector2(fSpeed * MathUtils.cos(fAngle), fSpeed * MathUtils.sin(fAngle));
+        if (!isPlayerInRange) {
+            if (fMoveTime >= fMoveCooldown) {
+                // Move in a random direction
+                fAngle = MathUtils.random(0f, 6.28319f);
+                vVelocity = new Vector2(fSpeed * MathUtils.cos(fAngle), fSpeed * MathUtils.sin(fAngle));
+                fMoveTime = 0;
+                fMoveCooldown = MathUtils.random();
+            }
+        } else {
+            fAngle = (float) MathUtils.atan2(vTargetPos.y - getY(), vTargetPos.x - getX());
+            vVelocity = new Vector2(fSpeed * MathUtils.cos(fAngle), fSpeed * MathUtils.sin(fAngle));
+        }
         setPosition(getX() + vVelocity.x * Gdx.graphics.getDeltaTime(), getY() + vVelocity.y * Gdx.graphics.getDeltaTime());
-
     }
 
     @Override
@@ -63,6 +77,7 @@ public class Guck extends Enemy {
     public void update(float delta) {
         move();
         fElapsedTime += delta;
+        fMoveTime += delta;
         fAttackCooldown += delta;
         if (fAttackCooldown >= 1 / gun.getAttackSpeed()) {
             shoot();

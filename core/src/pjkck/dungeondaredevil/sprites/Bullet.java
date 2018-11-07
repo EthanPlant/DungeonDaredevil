@@ -57,9 +57,4 @@ public class Bullet extends Sprite {
     public void update() {
         setPosition(getX() + vVelocity.x * Gdx.graphics.getDeltaTime(), getY() + vVelocity.y * Gdx.graphics.getDeltaTime());
     }
-
-    public float findDistance(Vector2 vPos) {
-        // Calculate distance between bullet and a point
-        return (float) Math.sqrt(Math.pow((getX() - vPos.x), 2) + Math.pow((getY() - vPos.y), 2));
-    }
 }

@@ -196,6 +196,10 @@ public class Player extends Sprite {
         return nDir;
     }
 
+    public Gun getGun() {
+        return gun;
+    }
+
     public void update(float delta) {
         fElapsedTime += delta;
         fAttackCooldown += delta;
@@ -211,9 +215,6 @@ public class Player extends Sprite {
 
         for (Bullet b : arBullets) {
             b.update();
-            if (b.findDistance(new Vector2(getX(), getY())) >= gun.getRange()) {
-                arBullets.removeValue(b, true);
-            }
         }
 
         setPosition(getX() + vVelocity.x * Gdx.graphics.getDeltaTime(), getY() + vVelocity.y * Gdx.graphics.getDeltaTime());

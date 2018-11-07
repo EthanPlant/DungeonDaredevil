@@ -136,6 +136,13 @@ public class ScrGame implements Screen {
                 e.setPosition(fEStartX, fEStartY);
             }
 
+            if (collisionHandler.findDistance(new Vector2(player.getX(), player.getY()), new Vector2(e.getX(), e.getY())) <= e.getRange()) {
+                e.setPlayerInRange(true);
+                e.setTargetPos(player.getX(), player.getY());
+            } else {
+                e.setPlayerInRange(false);
+            }
+
             for (Bullet b : player.getBullets()) {
                 if (collisionHandler.isCollidingWithMap(b.getBoundingRectangle(), 2)) {
                     player.getBullets().removeValue(b, true);
@@ -150,6 +157,10 @@ public class ScrGame implements Screen {
             for (Bullet b : e.getBullets()) {
                 if (b.getVelocity() == Vector2.Zero) {
                     b.setTargetPos(player.getX(), player.getY(), e.getGun().getSpray());
+                }
+
+                if (collisionHandler.findDistance(new Vector2(b.getX(), b.getY()), new Vector2(player.getX(), player.getY())) >= player.getGun().getRange()) {
+                    player.getBullets().removeValue(b, true);
                 }
 
                 if (collisionHandler.isCollidingWithMap(b.getBoundingRectangle(), 2)) {

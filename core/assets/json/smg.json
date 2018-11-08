@@ -1,6 +1,6 @@
 {
-  "bulletSpeed": 1000,
-  "attackSpeed": 100,
+  "bulletSpeed": 100,
+  "attackSpeed": 10,
   "range": 1000,
   "spray": 5
 }

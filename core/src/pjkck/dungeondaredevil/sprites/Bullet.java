@@ -53,6 +53,9 @@ public class Bullet extends Sprite {
         return vVelocity;
     }
 
+    public Vector2 getvTargetPos() {
+        return vTargetPos;
+    }
 
     public void update() {
         setPosition(getX() + vVelocity.x * Gdx.graphics.getDeltaTime(), getY() + vVelocity.y * Gdx.graphics.getDeltaTime());

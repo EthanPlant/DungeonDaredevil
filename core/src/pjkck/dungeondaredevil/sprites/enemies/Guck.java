@@ -51,25 +51,22 @@ public class Guck extends Enemy {
 
     @Override
     public void move() {
-        if (!isPlayerInRange) {
-            if (fMoveTime >= fMoveCooldown) {
-                // Move in a random direction
-                fAngle = MathUtils.random(0f, 6.28319f);
-                vVelocity = new Vector2(fSpeed * MathUtils.cos(fAngle), fSpeed * MathUtils.sin(fAngle));
-                fMoveTime = 0;
-                fMoveCooldown = MathUtils.random();
-            }
-        } else {
-            fAngle = (float) MathUtils.atan2(vTargetPos.y - getY(), vTargetPos.x - getX());
+        if (fMoveTime >= fMoveCooldown) {
+            // Move in a random direction
+            fAngle = MathUtils.random(0f, 6.28319f);
             vVelocity = new Vector2(fSpeed * MathUtils.cos(fAngle), fSpeed * MathUtils.sin(fAngle));
+            fMoveTime = 0;
+            fMoveCooldown = MathUtils.random();
         }
         setPosition(getX() + vVelocity.x * Gdx.graphics.getDeltaTime(), getY() + vVelocity.y * Gdx.graphics.getDeltaTime());
     }
 
     @Override
     public void shoot() {
-        Bullet b = new Bullet(getX(), getY(), new Texture("textures/guckbullet.png"), gun.getBulletSpeed(), 16, 16, false);
-        getBullets().add(b);
+        if (isPlayerInRange) {
+            Bullet b = new Bullet(getX(), getY(), new Texture("textures/guckbullet.png"), gun.getBulletSpeed(), 16, 16, false);
+            getBullets().add(b);
+        }
     }
 
 
@@ -78,7 +75,7 @@ public class Guck extends Enemy {
         move();
         fElapsedTime += delta;
         fMoveTime += delta;
-        fAttackCooldown += delta;
+        if (isPlayerInRange) fAttackCooldown += delta;
         if (fAttackCooldown >= 1 / gun.getAttackSpeed()) {
             shoot();
             fAttackCooldown = 0;

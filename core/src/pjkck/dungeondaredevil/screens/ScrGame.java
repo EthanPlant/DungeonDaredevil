@@ -76,9 +76,10 @@ public class ScrGame implements Screen {
         Gdx.graphics.setCursor(Gdx.graphics.newCursor(pm, 16, 16));
         pm.dispose();
 
-        stage = new Stage(new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
-        healthBar = new HealthBar(500, 20, player.getMaxHealth());
-        healthBar.setPosition(50, Gdx.graphics.getHeight() - 30);
+        stage = new Stage(new FitViewport(port.getWorldWidth(), port.getWorldHeight()
+        ));
+        healthBar = new HealthBar(250, 20, player.getMaxHealth());
+        healthBar.setPosition(10, stage.getViewport().getWorldHeight() - 30);
         stage.addActor(healthBar);
     }
 
@@ -128,6 +129,12 @@ public class ScrGame implements Screen {
 
         player.update(Gdx.graphics.getDeltaTime());
 
+        for (Bullet b : player.getBullets()) {
+            if (collisionHandler.findDistance(new Vector2(b.getX(), b.getY()), new Vector2(player.getX(), player.getY())) >= player.getGun().getRange()) {
+                player.getBullets().removeValue(b, true);
+            }
+        }
+
         // Update enemy location and check for collisions
         for (Enemy e : arEnemies) {
             float fEStartX = e.getX();
@@ -159,10 +166,6 @@ public class ScrGame implements Screen {
             for (Bullet b : e.getBullets()) {
                 if (b.getVelocity() == Vector2.Zero) {
                     b.setTargetPos(player.getX(), player.getY(), e.getGun().getSpray());
-                }
-
-                if (collisionHandler.findDistance(new Vector2(b.getX(), b.getY()), new Vector2(player.getX(), player.getY())) >= player.getGun().getRange()) {
-                    player.getBullets().removeValue(b, true);
                 }
 
                 if (collisionHandler.isCollidingWithMap(b.getBoundingRectangle(), 2)) {

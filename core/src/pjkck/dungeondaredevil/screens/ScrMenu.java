@@ -7,6 +7,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import pjkck.dungeondaredevil.GamDungeonDaredevil;
@@ -14,19 +17,33 @@ import pjkck.dungeondaredevil.GamDungeonDaredevil;
 public class ScrMenu implements Screen {
 
         private Texture txImg;
+
         private GamDungeonDaredevil game;
         private FitViewport port;
         private OrthographicCamera cam;
 
         private SpriteBatch batch;
 
+        private Stage stage;
+        private TextButton playButton;
 
         public ScrMenu(GamDungeonDaredevil game, SpriteBatch batch) {
+            this.game = game;
+            this.batch = batch;
+
             cam = new OrthographicCamera();
             port = new FitViewport(1920, 1080, cam);
             cam.position.set(port.getWorldWidth()/2, port.getWorldHeight()/2, 0);
-            this.game = game;
-            this.batch = batch;
+
+            stage = new Stage(port);
+            Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
+            playButton = new TextButton("Play", skin);
+            playButton.setSize(300, 100);
+            playButton.getLabel().setSize(300, 100);
+            playButton.setPosition(port.getWorldWidth() / 2 - playButton.getWidth() / 2, port.getWorldHeight() / 2 - playButton.getHeight() / 2);
+            stage.addActor(playButton);
+            Gdx.input.setInputProcessor(stage);
+
             txImg = new Texture("textures/titlescreen.png");
         }
 
@@ -38,6 +55,8 @@ public class ScrMenu implements Screen {
     @Override
     public void render(float delta) {
         cam.update();
+        stage.act(delta);
+
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -45,7 +64,11 @@ public class ScrMenu implements Screen {
         batch.begin();
         batch.draw(txImg, 0, 0);
         batch.end();
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+
+        stage.getBatch().setProjectionMatrix(cam.combined);
+        stage.draw();
+
+        if (playButton.isPressed()) {
             game.updateState(2);
         }
     }
@@ -53,7 +76,7 @@ public class ScrMenu implements Screen {
     @Override
     public void resize(int width, int height) {
         port.update(width, height);
-
+        stage.getViewport().update(width, height);
     }
 
     @Override
@@ -74,5 +97,6 @@ public class ScrMenu implements Screen {
     @Override
     public void dispose() {
         txImg.dispose();
+        stage.dispose();
     }
 }

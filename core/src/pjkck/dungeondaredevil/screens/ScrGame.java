@@ -17,6 +17,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import pjkck.dungeondaredevil.GamDungeonDaredevil;
 import pjkck.dungeondaredevil.sprites.Bullet;
 import pjkck.dungeondaredevil.sprites.Player;
@@ -74,7 +76,7 @@ public class ScrGame implements Screen {
         Gdx.graphics.setCursor(Gdx.graphics.newCursor(pm, 16, 16));
         pm.dispose();
 
-        stage = new Stage();
+        stage = new Stage(new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         healthBar = new HealthBar(500, 20, player.getMaxHealth());
         healthBar.setPosition(50, Gdx.graphics.getHeight() - 30);
         stage.addActor(healthBar);
@@ -235,6 +237,7 @@ public class ScrGame implements Screen {
     @Override
     public void resize(int width, int height) {
         port.update(width, height);
+        stage.getViewport().update(width, height, true);
     }
 
     @Override

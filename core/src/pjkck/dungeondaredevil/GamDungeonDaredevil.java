@@ -35,7 +35,6 @@ public class GamDungeonDaredevil extends Game {
 				setScreen(scrMenu);
 				break;
 			case 2:
-				//setScreen(scrGame);
 				setScreen(new ScrGame(this, batch));
 				break;
 		}
@@ -43,6 +42,7 @@ public class GamDungeonDaredevil extends Game {
 
 	@Override
 	public void dispose () {
+		super.dispose();
 		batch.dispose();
 	}
 }

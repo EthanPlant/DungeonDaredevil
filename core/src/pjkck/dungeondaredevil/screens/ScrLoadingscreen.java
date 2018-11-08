@@ -22,11 +22,13 @@ public class ScrLoadingscreen implements Screen {
     private float fElapsedTime;
 
     public ScrLoadingscreen(GamDungeonDaredevil game, SpriteBatch batch) {
+        this.game = game;
+        this.batch = batch;
+
         cam = new OrthographicCamera();
         port = new FitViewport(1920, 1080, cam);
         cam.position.set(port.getWorldWidth()/2, port.getWorldHeight()/2, 0);
-        this.game = game;
-        this.batch = batch;
+
         txImg = new Texture("textures/LoadingScreen.png");
 
         fElapsedTime = 0;

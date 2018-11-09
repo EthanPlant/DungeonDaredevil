@@ -99,7 +99,7 @@ public class Player extends Sprite {
 
         // Create gun from JSON file
         Json json = new Json();
-        gun = json.fromJson(Gun.class, Gdx.files.internal("json/sword.json"));
+        gun = json.fromJson(Gun.class, Gdx.files.internal("json/revolver.json"));
         fAttackCooldown = gun.getAttackSpeed();
 
         state = STATE.STANDING;

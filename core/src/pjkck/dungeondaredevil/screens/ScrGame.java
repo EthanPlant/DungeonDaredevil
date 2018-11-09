@@ -26,6 +26,9 @@ import pjkck.dungeondaredevil.sprites.enemies.Enemy;
 import pjkck.dungeondaredevil.sprites.enemies.Guck;
 import pjkck.dungeondaredevil.ui.HealthBar;
 import pjkck.dungeondaredevil.utils.CollisionHandler;
+import pjkck.dungeondaredevil.utils.InputManager;
+
+import java.util.zip.GZIPInputStream;
 
 public class ScrGame implements Screen {
     private Player player;
@@ -47,6 +50,8 @@ public class ScrGame implements Screen {
 
     private Stage stage;
     private HealthBar healthBar;
+
+    private InputManager inputManager;
 
     public ScrGame(GamDungeonDaredevil game, SpriteBatch batch) {
         this.game = game;
@@ -76,11 +81,13 @@ public class ScrGame implements Screen {
         Gdx.graphics.setCursor(Gdx.graphics.newCursor(pm, 16, 16));
         pm.dispose();
 
-        stage = new Stage(new FitViewport(port.getWorldWidth(), port.getWorldHeight()
-        ));
+        stage = new Stage(new FitViewport(port.getWorldWidth(), port.getWorldHeight()));
         healthBar = new HealthBar(250, 20, player.getMaxHealth());
         healthBar.setPosition(10, stage.getViewport().getWorldHeight() - 30);
         stage.addActor(healthBar);
+
+        inputManager = new InputManager();
+        Gdx.input.setInputProcessor(inputManager);
     }
 
 
@@ -91,34 +98,27 @@ public class ScrGame implements Screen {
     public void handleInput() {
         player.setVelocity(Vector2.Zero);
         // Get location of mouse cursor
-        Vector3 vMousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+        Vector3 vMousePos = new Vector3(inputManager.getMouseCoordinates(), 0);
         cam.unproject(vMousePos);
         player.setAngle(vMousePos);
 
-
-        if (Gdx.input.isKeyPressed(Input.Keys.W) && Gdx.input.isKeyPressed(Input.Keys.D)) {
-            player.move(4, 200);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.W) && Gdx.input.isKeyPressed(Input.Keys.A)) {
-            player.move(5, 200);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.S) && Gdx.input.isKeyPressed(Input.Keys.D)) {
-            player.move(6, 200);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.S) && Gdx.input.isKeyPressed(Input.Keys.A)) {
-            player.move(7, 200);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+        if (inputManager.isKeyDown(Input.Keys.W)) {
             player.move(0, 300);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+        } else if (inputManager.isKeyDown(Input.Keys.S)) {
             player.move(1, 300);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+        } else if (inputManager.isKeyDown(Input.Keys.A)) {
             player.move(2, 300);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+        } else if (inputManager.isKeyDown(Input.Keys.D)) {
             player.move(3, 300);
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+        if (inputManager.isKeyPressed(Input.Keys.SPACE)) {
             player.move(player.getDir(), 3000);
         }
-        if (Gdx.input.isTouched()) {
+        if (inputManager.isMouseDown()) {
             player.shoot(vMousePos);
         }
+
+        inputManager.update();
     }
 
     public void update() {

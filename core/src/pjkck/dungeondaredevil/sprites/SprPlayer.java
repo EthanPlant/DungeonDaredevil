@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.Json;
 
 import pjkck.dungeondaredevil.utils.Gun;
 
-public class Player extends Sprite {
+public class SprPlayer extends Sprite {
 
     private enum STATE {
         STANDING,
@@ -29,7 +29,7 @@ public class Player extends Sprite {
 
     private Vector2 vVelocity;
 
-    private Array<Bullet> arBullets;
+    private Array<SprBullet> arBullets;
 
     private Gun gun;
 
@@ -42,7 +42,7 @@ public class Player extends Sprite {
     private float fMaxHealth;
     private float fHealth;
 
-    public Player(float fX, float fY) {
+    public SprPlayer(float fX, float fY) {
         super();
 
         // Create animation data from spritesheet
@@ -89,7 +89,7 @@ public class Player extends Sprite {
         arWalkingAnimations[2] = new Animation<TextureRegion>(1 / 7f, rightFrames);
         arWalkingAnimations[3] = new Animation<TextureRegion>(1 / 7f, leftFrames);
 
-        arBullets = new Array<Bullet>();
+        arBullets = new Array<SprBullet>();
 
         setRegion(arWalkingAnimations[0].getKeyFrame(0));
         setOriginCenter();
@@ -145,7 +145,7 @@ public class Player extends Sprite {
 
     public void shoot(Vector3 vMousePos) {
         if (fAttackCooldown >= 1 / gun.getAttackSpeed()) {
-            Bullet b = new Bullet(getX(), getY(), new Texture("textures/bullet.png"), gun.getBulletSpeed(), 8, 8, true);
+            SprBullet b = new SprBullet(getX(), getY(), new Texture("textures/bullet.png"), gun.getBulletSpeed(), 8, 8, true);
             b.setTargetPos(vMousePos.x, vMousePos.y, gun.getSpray());
             arBullets.add(b);
             fAttackCooldown = 0;
@@ -176,7 +176,7 @@ public class Player extends Sprite {
         fHealth += value;
     }
 
-    public Array<Bullet> getBullets() {
+    public Array<SprBullet> getBullets() {
         return arBullets;
     }
 
@@ -213,7 +213,7 @@ public class Player extends Sprite {
 
         setImageBasedOnRotation(fAngle);
 
-        for (Bullet b : arBullets) {
+        for (SprBullet b : arBullets) {
             b.update();
         }
 

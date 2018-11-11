@@ -127,6 +127,10 @@ public class InputManager implements InputProcessor {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
+        mouseState.isDown = true;
+        mouseState.isPressed = true;
+
+        mouseState.vCoords = new Vector2(screenX, screenY);
         return false;
     }
 

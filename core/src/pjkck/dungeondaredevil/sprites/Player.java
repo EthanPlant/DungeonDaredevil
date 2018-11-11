@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.Json;
 
 import pjkck.dungeondaredevil.utils.Gun;
 
-public class SprPlayer extends Sprite {
+public class Player extends Sprite {
 
     private enum STATE {
         STANDING,
@@ -29,7 +29,7 @@ public class SprPlayer extends Sprite {
 
     private Vector2 vVelocity;
 
-    private Array<SprBullet> arBullets;
+    private Array<Bullet> arBullets;
 
     private Gun gun;
 
@@ -42,7 +42,7 @@ public class SprPlayer extends Sprite {
     private float fMaxHealth;
     private float fHealth;
 
-    public SprPlayer(float fX, float fY) {
+    public Player(float fX, float fY) {
         super();
 
         // Create animation data from spritesheet
@@ -89,7 +89,7 @@ public class SprPlayer extends Sprite {
         arWalkingAnimations[2] = new Animation<TextureRegion>(1 / 7f, rightFrames);
         arWalkingAnimations[3] = new Animation<TextureRegion>(1 / 7f, leftFrames);
 
-        arBullets = new Array<SprBullet>();
+        arBullets = new Array<Bullet>();
 
         setRegion(arWalkingAnimations[0].getKeyFrame(0));
         setOriginCenter();
@@ -145,7 +145,7 @@ public class SprPlayer extends Sprite {
 
     public void shoot(Vector3 vMousePos) {
         if (fAttackCooldown >= 1 / gun.getAttackSpeed()) {
-            SprBullet b = new SprBullet(getX(), getY(), new Texture("textures/bullet.png"), gun.getBulletSpeed(), 8, 8, true);
+            Bullet b = new Bullet(getX(), getY(), new Texture("textures/bullet.png"), gun.getBulletSpeed(), 8, 8, true);
             b.setTargetPos(vMousePos.x, vMousePos.y, gun.getSpray());
             arBullets.add(b);
             fAttackCooldown = 0;
@@ -176,7 +176,7 @@ public class SprPlayer extends Sprite {
         fHealth += value;
     }
 
-    public Array<SprBullet> getBullets() {
+    public Array<Bullet> getBullets() {
         return arBullets;
     }
 
@@ -213,7 +213,7 @@ public class SprPlayer extends Sprite {
 
         setImageBasedOnRotation(fAngle);
 
-        for (SprBullet b : arBullets) {
+        for (Bullet b : arBullets) {
             b.update();
         }
 

@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
-public class SprBullet extends Sprite {
+public class Bullet extends Sprite {
 
     private Vector2 vTargetPos;
     private Vector2 vVelocity;
@@ -15,7 +15,7 @@ public class SprBullet extends Sprite {
 
     private boolean shouldRotate;
 
-    public SprBullet(float x, float y, Texture tex, float fSpeed, float width, float height, boolean shouldRotate) {
+    public Bullet(float x, float y, Texture tex, float fSpeed, float width, float height, boolean shouldRotate) {
         super(tex);
 
         this.shouldRotate = shouldRotate;

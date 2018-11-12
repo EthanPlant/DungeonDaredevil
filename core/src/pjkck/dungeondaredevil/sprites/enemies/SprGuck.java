@@ -9,10 +9,10 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Json;
 
-import pjkck.dungeondaredevil.sprites.Bullet;
+import pjkck.dungeondaredevil.sprites.SprBullet;
 import pjkck.dungeondaredevil.utils.Gun;
 
-public class Guck extends Enemy {
+public class SprGuck extends SprEnemy {
 
     private float fMoveCooldown;
     private float fMoveTime;
@@ -20,7 +20,7 @@ public class Guck extends Enemy {
     private float fSpeed = 75;
     private float fAngle;
 
-    public Guck(float fX, float fY) {
+    public SprGuck(float fX, float fY) {
         super(fX, fY);
 
         gun = new Json().fromJson(Gun.class, Gdx.files.internal("json/guck.json"));
@@ -64,7 +64,7 @@ public class Guck extends Enemy {
     @Override
     public void shoot() {
         if (isPlayerInRange) {
-            Bullet b = new Bullet(getX(), getY(), new Texture("textures/guckbullet.png"), gun.getBulletSpeed(), 16, 16, false);
+            SprBullet b = new SprBullet(getX(), getY(), new Texture("textures/guckbullet.png"), gun.getBulletSpeed(), 16, 16, false);
             getBullets().add(b);
         }
     }
@@ -81,7 +81,7 @@ public class Guck extends Enemy {
             fAttackCooldown = 0;
         }
         setRegion(animMovement.getKeyFrame(fElapsedTime, true));
-        for (Bullet b : getBullets()) {
+        for (SprBullet b : getBullets()) {
             b.update();
         }
         rectHitbox.setPosition(getX() + 5, getY());

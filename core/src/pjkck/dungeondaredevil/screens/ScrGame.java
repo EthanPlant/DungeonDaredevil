@@ -17,23 +17,19 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
 import pjkck.dungeondaredevil.GamDungeonDaredevil;
-import pjkck.dungeondaredevil.sprites.Bullet;
-import pjkck.dungeondaredevil.sprites.Player;
-import pjkck.dungeondaredevil.sprites.enemies.Enemy;
-import pjkck.dungeondaredevil.sprites.enemies.Guck;
+import pjkck.dungeondaredevil.sprites.SprBullet;
+import pjkck.dungeondaredevil.sprites.SprPlayer;
+import pjkck.dungeondaredevil.sprites.enemies.SprEnemy;
+import pjkck.dungeondaredevil.sprites.enemies.SprGuck;
 import pjkck.dungeondaredevil.ui.HealthBar;
 import pjkck.dungeondaredevil.utils.CollisionHandler;
 import pjkck.dungeondaredevil.utils.InputManager;
 
-import java.util.zip.GZIPInputStream;
-
 public class ScrGame implements Screen {
-    private Player player;
+    private SprPlayer player;
 
-    private Array<Guck> arEnemies;
+    private Array<SprGuck> arEnemies;
 
     private GamDungeonDaredevil game;
 
@@ -68,12 +64,12 @@ public class ScrGame implements Screen {
         renderer = new OrthogonalTiledMapRenderer(map);
         collisionHandler = new CollisionHandler(map);
 
-        player = new Player(port.getWorldWidth() / 2, port.getWorldHeight() / 2);
-        arEnemies = new Array<Guck>();
+        player = new SprPlayer(port.getWorldWidth() / 2, port.getWorldHeight() / 2);
+        arEnemies = new Array<SprGuck>();
 
         // Spawn enemies
         for (int i = 0; i < 10; i++) {
-            arEnemies.add(new Guck(MathUtils.random(64, 704), MathUtils.random(64, 672)));
+            arEnemies.add(new SprGuck(MathUtils.random(64, 704), MathUtils.random(64, 672)));
         }
 
         // Set custom cursor
@@ -129,14 +125,14 @@ public class ScrGame implements Screen {
 
         player.update(Gdx.graphics.getDeltaTime());
 
-        for (Bullet b : player.getBullets()) {
+        for (SprBullet b : player.getBullets()) {
             if (collisionHandler.findDistance(new Vector2(b.getX(), b.getY()), new Vector2(player.getX(), player.getY())) >= player.getGun().getRange()) {
                 player.getBullets().removeValue(b, true);
             }
         }
 
         // Update enemy location and check for collisions
-        for (Enemy e : arEnemies) {
+        for (SprEnemy e : arEnemies) {
             float fEStartX = e.getX();
             float fEStartY = e.getY();
 
@@ -152,7 +148,7 @@ public class ScrGame implements Screen {
                 e.setPlayerInRange(false);
             }
 
-            for (Bullet b : player.getBullets()) {
+            for (SprBullet b : player.getBullets()) {
                 if (collisionHandler.isCollidingWithMap(b.getBoundingRectangle(), 2)) {
                     player.getBullets().removeValue(b, true);
                 }
@@ -163,7 +159,7 @@ public class ScrGame implements Screen {
                 }
             }
 
-            for (Bullet b : e.getBullets()) {
+            for (SprBullet b : e.getBullets()) {
                 if (b.getVelocity() == Vector2.Zero) {
                     b.setTargetPos(player.getX(), player.getY(), e.getGun().getSpray());
                 }
@@ -185,7 +181,7 @@ public class ScrGame implements Screen {
             }
 
             if (e.getHealth() <= 0) {
-                arEnemies.removeValue((Guck) e, true);
+                arEnemies.removeValue((SprGuck) e, true);
             }
         }
 
@@ -221,13 +217,13 @@ public class ScrGame implements Screen {
         // Draw the sprites
         batch.setProjectionMatrix(cam.combined);
         batch.begin();
-        for (Bullet b : player.getBullets()) {
+        for (SprBullet b : player.getBullets()) {
             b.draw(batch);
         }
         player.draw(batch);
-        for (Enemy e : arEnemies) {
+        for (SprEnemy e : arEnemies) {
             e.draw(batch);
-            for (Bullet b : e.getBullets()) {
+            for (SprBullet b : e.getBullets()) {
                 b.draw(batch);
             }
         }

@@ -9,10 +9,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 
-import pjkck.dungeondaredevil.sprites.Bullet;
+import pjkck.dungeondaredevil.sprites.SprBullet;
 import pjkck.dungeondaredevil.utils.Gun;
 
-public abstract class Enemy extends Sprite {
+public abstract class SprEnemy extends Sprite {
 
     protected float fElapsedTime;
     protected float fRange;
@@ -26,15 +26,15 @@ public abstract class Enemy extends Sprite {
 
     protected Gun gun;
     protected float fAttackCooldown;
-    private Array<Bullet> arBullets;
+    private Array<SprBullet> arBullets;
 
     private float fHealth;
 
-    public Enemy(float fX, float fY) {
+    public SprEnemy(float fX, float fY) {
         super();
         setPosition(fX, fY);
         setBounds(fX, fY, 32, 32);
-        arBullets = new Array<Bullet>();
+        arBullets = new Array<SprBullet>();
         gun = new Json().fromJson(Gun.class, Gdx.files.internal("json/smg.json"));
         fAttackCooldown = gun.getAttackSpeed();
         fRange = gun.getRange();
@@ -45,7 +45,7 @@ public abstract class Enemy extends Sprite {
         return rectHitbox;
     }
 
-    public Array<Bullet> getBullets() {
+    public Array<SprBullet> getBullets() {
         return arBullets;
     }
 

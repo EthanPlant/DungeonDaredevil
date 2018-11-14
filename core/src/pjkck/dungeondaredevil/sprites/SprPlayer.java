@@ -106,7 +106,7 @@ public class SprPlayer extends Sprite {
 
         rectHitbox = new Rectangle(getX() + 5, getY(), 27, 27);
 
-        fHealth = fMaxHealth = 1000;
+        fHealth = fMaxHealth = 100;
     }
 
     public void setAngle(Vector3 vMousePos) {
@@ -120,25 +120,25 @@ public class SprPlayer extends Sprite {
                 vVelocity = (new Vector2(0, fSpeed));
                 break;
             case 1:
-                vVelocity = (new Vector2(0, -fSpeed));
-                break;
-            case 2:
-                vVelocity = (new Vector2(-fSpeed, 0));
-                break;
-            case 3:
-                vVelocity = (new Vector2(fSpeed, 0));
-                break;
-            case 4:
                 vVelocity = (new Vector2(fSpeed, fSpeed));
                 break;
-            case 5:
-                vVelocity = (new Vector2(-fSpeed, fSpeed));
+            case 2:
+                vVelocity = (new Vector2(fSpeed, 0));
                 break;
-            case 6:
+            case 3:
                 vVelocity = (new Vector2(fSpeed, -fSpeed));
                 break;
-            case 7:
+            case 4:
+                vVelocity = (new Vector2(0, -fSpeed));
+                break;
+            case 5:
                 vVelocity = (new Vector2(-fSpeed, -fSpeed));
+                break;
+            case 6:
+                vVelocity = (new Vector2(-fSpeed, 0));
+                break;
+            case 7:
+                vVelocity = (new Vector2(-fSpeed, fSpeed));
                 break;
         }
     }

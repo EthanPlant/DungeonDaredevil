@@ -15,36 +15,36 @@ import pjkck.dungeondaredevil.GamDungeonDaredevil;
 
 public class ScrMenu implements Screen {
 
-        private Texture txImg;
+    private Texture txImg;
 
-        private GamDungeonDaredevil game;
-        private FitViewport port;
-        private OrthographicCamera cam;
+    private GamDungeonDaredevil game;
+    private FitViewport port;
+    private OrthographicCamera cam;
 
-        private SpriteBatch batch;
+    private SpriteBatch batch;
 
-        private Stage stage;
-        private TextButton playButton;
+    private Stage stage;
+    private TextButton playButton;
 
-        public ScrMenu(GamDungeonDaredevil game, SpriteBatch batch) {
-            this.game = game;
-            this.batch = batch;
+    public ScrMenu(GamDungeonDaredevil game, SpriteBatch batch) {
+        this.game = game;
+        this.batch = batch;
 
-            cam = new OrthographicCamera();
-            port = new FitViewport(1920, 1080, cam);
-            cam.position.set(port.getWorldWidth()/2, port.getWorldHeight()/2, 0);
+        cam = new OrthographicCamera();
+        port = new FitViewport(1920, 1080, cam);
+        cam.position.set(port.getWorldWidth() / 2, port.getWorldHeight() / 2, 0);
 
-            stage = new Stage(port);
-            Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
-            playButton = new TextButton("Play", skin);
-            playButton.setSize(300, 100);
-            playButton.getLabel().setSize(300, 100);
-            playButton.setPosition(port.getWorldWidth() / 2 - playButton.getWidth() / 2, port.getWorldHeight() / 2 - playButton.getHeight() / 2);
-            stage.addActor(playButton);
-            Gdx.input.setInputProcessor(stage);
+        stage = new Stage(port);
+        Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
+        playButton = new TextButton("Play", skin);
+        playButton.setSize(300, 100);
+        playButton.getLabel().setSize(300, 100);
+        playButton.setPosition(port.getWorldWidth() / 2 - playButton.getWidth() / 2, port.getWorldHeight() / 2 - playButton.getHeight() / 2);
+        stage.addActor(playButton);
+        Gdx.input.setInputProcessor(stage);
 
-            txImg = new Texture("textures/titlescreen.png");
-        }
+        txImg = new Texture("textures/titlescreen.png");
+    }
 
     @Override
     public void show() {

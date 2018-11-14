@@ -10,13 +10,11 @@ import pjkck.dungeondaredevil.screens.ScrMenu;
 
 public class GamDungeonDaredevil extends Game {
 	SpriteBatch batch;
-	private ScrMenu scrMenu;
 	private ScrLoadingscreen scrLoadingscreen;
 	
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		scrMenu = new ScrMenu(this, batch);
 		scrLoadingscreen = new ScrLoadingscreen(this, batch);
 		updateState(0);
 	}
@@ -32,7 +30,7 @@ public class GamDungeonDaredevil extends Game {
 				setScreen(scrLoadingscreen);
 				break;
 			case 1:
-				setScreen(scrMenu);
+				setScreen(new ScrMenu(this, batch));
 				break;
 			case 2:
 				setScreen(new ScrGame(this, batch));

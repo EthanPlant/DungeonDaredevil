@@ -102,9 +102,9 @@ public class ScrGame implements Screen {
             player.move(7, 300);
         } else if (inputManager.isKeyDown(Input.Keys.W) && inputManager.isKeyDown(Input.Keys.D)) {
             player.move(1, 300);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.S) && Gdx.input.isKeyPressed(Input.Keys.A)) {
+        } else if (inputManager.isKeyDown(Input.Keys.S) && inputManager.isKeyDown(Input.Keys.A)) {
             player.move(5, 300);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.S) && Gdx.input.isKeyPressed(Input.Keys.D)) {
+        } else if (inputManager.isKeyDown(Input.Keys.S) && inputManager.isKeyDown(Input.Keys.D)) {
             player.move(3, 300);
         } else if (inputManager.isKeyDown(Input.Keys.W)) {
             player.move(0, 300);

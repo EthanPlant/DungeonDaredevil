@@ -15,13 +15,17 @@ public class SprBullet extends Sprite {
 
     private boolean shouldRotate;
 
-    public SprBullet(float x, float y, Texture tex, float fSpeed, float width, float height, boolean shouldRotate) {
+    private Class origin;
+
+    public SprBullet(float x, float y, Texture tex, float fSpeed, float width, float height, boolean shouldRotate, Class origin) {
         super(tex);
 
         this.shouldRotate = shouldRotate;
 
         vVelocity = Vector2.Zero;
         this.fSpeed = fSpeed;
+
+        this.origin = origin;
 
         setPosition(x, y);
         setOriginCenter();
@@ -57,7 +61,11 @@ public class SprBullet extends Sprite {
         return vTargetPos;
     }
 
-    public void update() {
-        setPosition(getX() + vVelocity.x * Gdx.graphics.getDeltaTime(), getY() + vVelocity.y * Gdx.graphics.getDeltaTime());
+    public Class getOrigin() {
+        return origin;
+    }
+
+    public void update(float delta) {
+        setPosition(getX() + vVelocity.x * delta, getY() + vVelocity.y * delta);
     }
 }

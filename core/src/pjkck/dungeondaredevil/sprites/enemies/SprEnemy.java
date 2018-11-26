@@ -30,11 +30,11 @@ public abstract class SprEnemy extends Sprite {
 
     private float fHealth;
 
-    public SprEnemy(float fX, float fY) {
+    public SprEnemy(float fX, float fY, Array<SprBullet> arBullets) {
         super();
         setPosition(fX, fY);
         setBounds(fX, fY, 32, 32);
-        arBullets = new Array<SprBullet>();
+        this.arBullets = arBullets;
         gun = new Json().fromJson(Gun.class, Gdx.files.internal("json/smg.json"));
         fAttackCooldown = gun.getAttackSpeed();
         fRange = gun.getRange();

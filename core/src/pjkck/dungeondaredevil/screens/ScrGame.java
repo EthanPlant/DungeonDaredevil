@@ -49,6 +49,8 @@ public class ScrGame implements Screen {
 
     private InputManager inputManager;
 
+    private Array<SprBullet> arBullets;
+
     public ScrGame(GamDungeonDaredevil game, SpriteBatch batch) {
         this.game = game;
         this.batch = batch;
@@ -67,9 +69,11 @@ public class ScrGame implements Screen {
         player = new SprPlayer(port.getWorldWidth() / 2, port.getWorldHeight() / 2);
         arEnemies = new Array<SprGuck>();
 
+        arBullets = new Array<SprBullet>();
+
         // Spawn enemies
         for (int i = 0; i < 10; i++) {
-            arEnemies.add(new SprGuck(MathUtils.random(64, 704), MathUtils.random(64, 672)));
+            arEnemies.add(new SprGuck(MathUtils.random(64, 704), MathUtils.random(64, 672), arBullets));
         }
 
         // Set custom cursor
@@ -119,7 +123,7 @@ public class ScrGame implements Screen {
             player.move(player.getDir(), 3000);
         }
         if (inputManager.isMouseDown()) {
-            player.shoot(vMousePos);
+            player.shoot(vMousePos, arBullets);
         }
 
         inputManager.update();
@@ -133,13 +137,31 @@ public class ScrGame implements Screen {
 
         player.update(Gdx.graphics.getDeltaTime());
 
-        for (SprBullet b : player.getBullets()) {
+        for (SprBullet b : arBullets) {
+            b.update(Gdx.graphics.getDeltaTime());
+
             if (collisionHandler.findDistance(new Vector2(b.getX(), b.getY()), new Vector2(player.getX(), player.getY())) >= player.getGun().getRange()) {
-                player.getBullets().removeValue(b, true);
+                arBullets.removeValue(b, true);
             }
 
             if (collisionHandler.isCollidingWithMap(b.getBoundingRectangle(), 2)) {
-                player.getBullets().removeValue(b, true);
+                arBullets.removeValue(b, true);
+            }
+
+            if (collisionHandler.isSpriteColliding(b.getBoundingRectangle(), player.getHitbox()) && b.getOrigin() != SprPlayer.class) {
+                arBullets.removeValue(b, true);
+                player.setHealth(-10);
+            }
+
+            for (SprEnemy e : arEnemies) {
+                if (b.getVelocity() == Vector2.Zero && b.getOrigin() != SprPlayer.class) {
+                    b.setTargetPos(player.getX(), player.getY(), e.getGun().getSpray());
+                }
+
+                if (collisionHandler.isSpriteColliding(b.getBoundingRectangle(), e.getHitbox()) && b.getOrigin() == SprPlayer.class) {
+                    arBullets.removeValue(b, true);
+                    e.setHealth(-10);
+                }
             }
         }
 
@@ -158,28 +180,6 @@ public class ScrGame implements Screen {
                 e.setTargetPos(player.getX(), player.getY());
             } else {
                 e.setPlayerInRange(false);
-            }
-
-            for (SprBullet b : player.getBullets()) {
-                if (collisionHandler.isSpriteColliding(b.getBoundingRectangle(), e.getHitbox())) {
-                    player.getBullets().removeValue(b, true);
-                    e.setHealth(-10);
-                }
-            }
-
-            for (SprBullet b : e.getBullets()) {
-                if (b.getVelocity() == Vector2.Zero) {
-                    b.setTargetPos(player.getX(), player.getY(), e.getGun().getSpray());
-                }
-
-                if (collisionHandler.isCollidingWithMap(b.getBoundingRectangle(), 2)) {
-                    e.getBullets().removeValue(b, true);
-                }
-
-                if (collisionHandler.isSpriteColliding(b.getBoundingRectangle(), player.getHitbox())) {
-                    e.getBullets().removeValue(b, true);
-                    player.setHealth(-10);
-                }
             }
 
             if (collisionHandler.isSpriteColliding(player.getHitbox(), e.getHitbox())) {
@@ -212,7 +212,7 @@ public class ScrGame implements Screen {
     public void render(float delta) {
         update();
 
-        Gdx.app.log("FPS", Integer.toString(Gdx.graphics.getFramesPerSecond()));
+        Gdx.app.log("Delta Time", Float.toString(Gdx.graphics.getDeltaTime()));
 //        Gdx.app.log("DT", Float.toString(Gdx.graphics.getDeltaTime()));
 
         renderer.setView(cam);
@@ -225,15 +225,12 @@ public class ScrGame implements Screen {
         // Draw the sprites
         batch.setProjectionMatrix(cam.combined);
         batch.begin();
-        for (SprBullet b : player.getBullets()) {
+        for (SprBullet b : arBullets) {
             b.draw(batch);
         }
         player.draw(batch);
         for (SprEnemy e : arEnemies) {
             e.draw(batch);
-            for (SprBullet b : e.getBullets()) {
-                b.draw(batch);
-            }
         }
         batch.end();
         stage.getBatch().setProjectionMatrix(cam.combined);
@@ -265,7 +262,7 @@ public class ScrGame implements Screen {
     @Override
     public void dispose() {
         arEnemies.clear();
-        player.getBullets().clear();
+        arBullets.clear();
         map.dispose();
     }
 }

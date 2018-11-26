@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 
 import pjkck.dungeondaredevil.sprites.SprBullet;
@@ -20,8 +21,8 @@ public class SprGuck extends SprEnemy {
     private float fSpeed = 75;
     private float fAngle;
 
-    public SprGuck(float fX, float fY) {
-        super(fX, fY);
+    public SprGuck(float fX, float fY, Array<SprBullet> arBullets) {
+        super(fX, fY, arBullets);
 
         gun = new Json().fromJson(Gun.class, Gdx.files.internal("json/guck.json"));
         fAttackCooldown = gun.getAttackSpeed();
@@ -64,7 +65,7 @@ public class SprGuck extends SprEnemy {
     @Override
     public void shoot() {
         if (isPlayerInRange) {
-            SprBullet b = new SprBullet(getX(), getY(), new Texture("textures/guckbullet.png"), gun.getBulletSpeed(), 16, 16, false);
+            SprBullet b = new SprBullet(getX(), getY(), new Texture("textures/guckbullet.png"), gun.getBulletSpeed(), 16, 16, false, this.getClass());
             getBullets().add(b);
         }
     }
@@ -81,9 +82,6 @@ public class SprGuck extends SprEnemy {
             fAttackCooldown = 0;
         }
         setRegion(animMovement.getKeyFrame(fElapsedTime, true));
-        for (SprBullet b : getBullets()) {
-            b.update();
-        }
         rectHitbox.setPosition(getX() + 5, getY());
     }
 }

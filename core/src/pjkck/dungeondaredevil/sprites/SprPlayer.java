@@ -29,8 +29,6 @@ public class SprPlayer extends Sprite {
 
     private Vector2 vVelocity;
 
-    private Array<SprBullet> arBullets;
-
     private Gun gun;
 
     private STATE state;
@@ -89,8 +87,6 @@ public class SprPlayer extends Sprite {
         arWalkingAnimations[2] = new Animation<TextureRegion>(1 / 7f, rightFrames);
         arWalkingAnimations[3] = new Animation<TextureRegion>(1 / 7f, leftFrames);
 
-        arBullets = new Array<SprBullet>();
-
         setRegion(arWalkingAnimations[0].getKeyFrame(0));
         setOriginCenter();
         setBounds(fX, fY, 32, 32);
@@ -143,11 +139,11 @@ public class SprPlayer extends Sprite {
         }
     }
 
-    public void shoot(Vector3 vMousePos) {
+    public void shoot(Vector3 vMousePos, Array<SprBullet> bullets) {
         if (fAttackCooldown >= 1 / gun.getAttackSpeed()) {
-            SprBullet b = new SprBullet(getX(), getY(), new Texture("textures/bullet.png"), gun.getBulletSpeed(), 8, 8, true);
+            SprBullet b = new SprBullet(getX(), getY(), new Texture("textures/bullet.png"), gun.getBulletSpeed(), 8, 8, true, this.getClass());
             b.setTargetPos(vMousePos.x, vMousePos.y, gun.getSpray());
-            arBullets.add(b);
+            bullets.add(b);
             fAttackCooldown = 0;
         }
     }
@@ -174,10 +170,6 @@ public class SprPlayer extends Sprite {
 
     public void setHealth(float value) {
         fHealth += value;
-    }
-
-    public Array<SprBullet> getBullets() {
-        return arBullets;
     }
 
     public Rectangle getHitbox() {
@@ -212,10 +204,6 @@ public class SprPlayer extends Sprite {
         }
 
         setImageBasedOnRotation(fAngle);
-
-        for (SprBullet b : arBullets) {
-            b.update();
-        }
 
         setPosition(getX() + vVelocity.x * Gdx.graphics.getDeltaTime(), getY() + vVelocity.y * Gdx.graphics.getDeltaTime());
         rectHitbox.setPosition(getX() + 5, getY());

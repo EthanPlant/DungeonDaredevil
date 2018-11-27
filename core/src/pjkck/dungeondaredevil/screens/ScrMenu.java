@@ -1,6 +1,7 @@
 package pjkck.dungeondaredevil.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -67,7 +68,7 @@ public class ScrMenu implements Screen {
         stage.getBatch().setProjectionMatrix(cam.combined);
         stage.draw();
 
-        if (playButton.isPressed()) {
+        if (playButton.isPressed() || Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             game.updateState(2);
         }
     }

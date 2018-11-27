@@ -1,6 +1,7 @@
 package pjkck.dungeondaredevil.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import pjkck.dungeondaredevil.GamDungeonDaredevil;
+import pjkck.dungeondaredevil.utils.InputManager;
 
 public class ScrLoadingscreen implements Screen {
 
@@ -21,6 +23,8 @@ public class ScrLoadingscreen implements Screen {
 
     private float fElapsedTime;
 
+    private InputManager inputManager;
+
     public ScrLoadingscreen(GamDungeonDaredevil game, SpriteBatch batch) {
         this.game = game;
         this.batch = batch;
@@ -30,6 +34,9 @@ public class ScrLoadingscreen implements Screen {
         cam.position.set(port.getWorldWidth()/2, port.getWorldHeight()/2, 0);
 
         txImg = new Texture("textures/LoadingScreen.png");
+
+        inputManager = new InputManager();
+        Gdx.input.setInputProcessor(inputManager);
 
         fElapsedTime = 0;
     }
@@ -51,7 +58,7 @@ public class ScrLoadingscreen implements Screen {
         batch.draw(txImg, 0, 0);
         batch.end();
         // Show splash screen for 5 seconds than switch to menu
-        if (fElapsedTime >= 5) {
+        if (fElapsedTime >= 5 || inputManager.isKeyPressed(Input.Keys.SPACE)) {
             game.updateState(1);
             dispose();
         }

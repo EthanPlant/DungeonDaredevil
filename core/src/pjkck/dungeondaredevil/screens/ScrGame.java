@@ -212,7 +212,7 @@ public class ScrGame implements Screen {
     public void render(float delta) {
         update();
 
-        Gdx.app.log("Delta Time", Float.toString(Gdx.graphics.getDeltaTime()));
+       //Gdx.app.log("Delta Time", Float.toString(Gdx.graphics.getDeltaTime()));
 //        Gdx.app.log("DT", Float.toString(Gdx.graphics.getDeltaTime()));
 
         renderer.setView(cam);

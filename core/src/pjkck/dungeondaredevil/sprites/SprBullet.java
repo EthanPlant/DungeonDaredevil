@@ -33,20 +33,13 @@ public class SprBullet extends Sprite {
     }
 
     // Set the location to shoot towards
-    public void setTargetPos(Vector2 value, float spray) {
-        vTargetPos = value;
+    public void setTargetPos(Vector2 vTargetPos, float spray) {
+        this.vTargetPos = vTargetPos;
         // Calculate angle to target location
-        float fAngle = (float) Math.toDegrees(MathUtils.atan2(vTargetPos.y - getY(), vTargetPos.x - getX()));
-        int nSprayChooser = MathUtils.random(100);
-        float fSprayAmount = MathUtils.random(spray);
-        if (nSprayChooser != 0 && nSprayChooser < 50) {
-            fAngle += fSprayAmount;
-        } else if (nSprayChooser >= 50) {
-            fAngle -= fSprayAmount;
-        }
-        if (shouldRotate) setRotation(fAngle);
+        float fSprayAngle = MathUtils.random(-spray, spray);
         // Set velocity vector
-        vVelocity = new Vector2(fSpeed * MathUtils.cos((float) Math.toRadians(fAngle)), fSpeed * MathUtils.sin((float) Math.toRadians(fAngle)));
+        vVelocity = vTargetPos.sub(new Vector2(getX(), getY())).nor().scl(fSpeed).rotate(fSprayAngle);
+        if (shouldRotate) setRotation(vVelocity.angle());
     }
 
     public void setTargetPos(float x, float y, float spray) {
@@ -55,10 +48,6 @@ public class SprBullet extends Sprite {
 
     public Vector2 getVelocity() {
         return vVelocity;
-    }
-
-    public Vector2 getvTargetPos() {
-        return vTargetPos;
     }
 
     public Class getOrigin() {

@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -17,6 +18,12 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
+import io.socket.client.IO;
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import pjkck.dungeondaredevil.GamDungeonDaredevil;
 import pjkck.dungeondaredevil.sprites.SprBullet;
 import pjkck.dungeondaredevil.sprites.SprPlayer;
@@ -25,6 +32,9 @@ import pjkck.dungeondaredevil.sprites.enemies.SprGuck;
 import pjkck.dungeondaredevil.ui.HealthBar;
 import pjkck.dungeondaredevil.utils.CollisionHandler;
 import pjkck.dungeondaredevil.utils.InputManager;
+
+import java.net.URISyntaxException;
+import java.util.HashMap;
 
 public class ScrGame implements Screen {
     private SprPlayer player;
@@ -51,9 +61,17 @@ public class ScrGame implements Screen {
 
     private Array<SprBullet> arBullets;
 
+    private HashMap<String, SprPlayer> players;
+
+    private Socket socket;
+
+    private Texture txPlayerSpriteSheet;
+
     public ScrGame(GamDungeonDaredevil game, SpriteBatch batch) {
         this.game = game;
         this.batch = batch;
+
+        txPlayerSpriteSheet = new Texture("spritesheets/player.png");
 
         // Set up camera
         cam = new OrthographicCamera();
@@ -66,10 +84,16 @@ public class ScrGame implements Screen {
         renderer = new OrthogonalTiledMapRenderer(map);
         collisionHandler = new CollisionHandler(map);
 
-        player = new SprPlayer(port.getWorldWidth() / 2, port.getWorldHeight() / 2);
         arEnemies = new Array<SprGuck>();
 
         arBullets = new Array<SprBullet>();
+
+        player = new SprPlayer(port.getWorldWidth() / 2, port.getWorldHeight() / 2, txPlayerSpriteSheet);
+
+        players = new HashMap<String, SprPlayer>();
+
+        connectSocket();
+        configSocketEvents();
 
         // Spawn enemies
         for (int i = 0; i < 10; i++) {
@@ -88,6 +112,84 @@ public class ScrGame implements Screen {
 
         inputManager = new InputManager();
         Gdx.input.setInputProcessor(inputManager);
+    }
+
+    public void connectSocket() {
+        try {
+            socket = IO.socket("http://localhost:8080");
+            socket.connect();
+        } catch (URISyntaxException e) {
+            Gdx.app.log("SocketIO", "Connection Error", e);
+        }
+    }
+
+    public void configSocketEvents() {
+        socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                Gdx.app.log("SocketIO", "Connected");
+            }
+        }).on("socketID", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject data = (JSONObject) args[0];
+                try {
+                    String id = data.getString("id");
+                    Gdx.app.log("SocketIO", "My ID: " + id);
+                } catch (JSONException e) {
+                    Gdx.app.log("SocketIO", "Error getting ID");
+                }
+            }
+        }).on("newPlayer", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject data = (JSONObject) args[0];
+                try {
+                    String playerID = data.getString("id");
+                    Gdx.app.log("SocketIO", "New Player Connected: " + playerID);
+                    players.put(playerID, new SprPlayer(port.getWorldWidth() / 2, port.getWorldHeight() / 2, txPlayerSpriteSheet));
+                } catch (JSONException e) {
+                    Gdx.app.log("SocketIO", "Error getting new player ID");
+                }
+            }
+        }).on("playerDisconnected", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject data = (JSONObject) args[0];
+                try {
+                    String id = data.getString("id");
+                    players.remove(id);
+                } catch (JSONException e) {
+                    Gdx.app.log("SocketIO", "Error getting new player ID");
+                }
+            }
+        }).on("getPlayers", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONArray objects = (JSONArray) args[0];
+                try {
+                    for (int i = 0; i < objects.length(); i++) {
+                        players.put(objects.getJSONObject(i).getString("id"), new SprPlayer((float) objects.getJSONObject(i).getDouble("x"), (float) objects.getJSONObject(i).getDouble("y"), txPlayerSpriteSheet));
+                    }
+                } catch (JSONException e) {
+                    Gdx.app.log("SocketIO", "Error getting players");
+                }
+            }
+        }).on("playerMoved", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject data = (JSONObject) args[0];
+                try {
+                    String playerID = data.getString("id");
+                    Double x = data.getDouble("x");
+                    Double y = data.getDouble("y");
+                    if (players.get(playerID) != null) {
+                        players.get(playerID).setPosition(x.floatValue(), y.floatValue());
+                    }
+                } catch (JSONException e) {
+                }
+            }
+        });
     }
 
 
@@ -137,6 +239,21 @@ public class ScrGame implements Screen {
 
         player.update(Gdx.graphics.getDeltaTime());
 
+        for (HashMap.Entry<String, SprPlayer> entry : players.entrySet()) {
+            entry.getValue().update(Gdx.graphics.getDeltaTime());
+        }
+
+        JSONObject data = new JSONObject();
+        try {
+            data.put("x", player.getX());
+            data.put("y", player.getY());
+            data.put("dir", player.getDir());
+            data.put("state", player.getState());
+            socket.emit("playerMoved", data);
+        } catch (JSONException e) {
+            Gdx.app.log("SocketIO", "Error updating server!");
+        }
+
         for (SprBullet b : arBullets) {
             b.update(Gdx.graphics.getDeltaTime());
 
@@ -166,32 +283,33 @@ public class ScrGame implements Screen {
         }
 
         // Update enemy location and check for collisions
-        for (SprEnemy e : arEnemies) {
-            float fEStartX = e.getX();
-            float fEStartY = e.getY();
-
-            e.update(Gdx.graphics.getDeltaTime());
-            if (collisionHandler.isCollidingWithMap(e.getHitbox(), 2)) {
-                e.setPosition(fEStartX, fEStartY);
-            }
-
-            if (collisionHandler.findDistance(new Vector2(player.getX(), player.getY()), new Vector2(e.getX(), e.getY())) <= e.getRange()) {
-                e.setPlayerInRange(true);
-                e.setTargetPos(player.getX(), player.getY());
-            } else {
-                e.setPlayerInRange(false);
-            }
-
-            if (collisionHandler.isSpriteColliding(player.getHitbox(), e.getHitbox())) {
-                e.setPosition(fEStartX, fEStartY);
-
-                player.setPosition(fStartX, fStartY);
-            }
-
-            if (e.getHealth() <= 0) {
-                arEnemies.removeValue((SprGuck) e, true);
-            }
-        }
+        // Not updating enemies ATM as this will have to be done by the server
+//        for (SprEnemy e : arEnemies) {
+//            float fEStartX = e.getX();
+//            float fEStartY = e.getY();
+//
+//            e.update(Gdx.graphics.getDeltaTime());
+//            if (collisionHandler.isCollidingWithMap(e.getHitbox(), 2)) {
+//                e.setPosition(fEStartX, fEStartY);
+//            }
+//
+//            if (collisionHandler.findDistance(new Vector2(player.getX(), player.getY()), new Vector2(e.getX(), e.getY())) <= e.getRange()) {
+//                e.setPlayerInRange(true);
+//                e.setTargetPos(player.getX(), player.getY());
+//            } else {
+//                e.setPlayerInRange(false);
+//            }
+//
+//            if (collisionHandler.isSpriteColliding(player.getHitbox(), e.getHitbox())) {
+//                e.setPosition(fEStartX, fEStartY);
+//
+//                player.setPosition(fStartX, fStartY);
+//            }
+//
+//            if (e.getHealth() <= 0) {
+//                arEnemies.removeValue((SprGuck) e, true);
+//            }
+//        }
 
         if (collisionHandler.isCollidingWithMap(player.getHitbox(), 2)) {
             player.setPosition(fStartX, fStartY);
@@ -228,7 +346,12 @@ public class ScrGame implements Screen {
         for (SprBullet b : arBullets) {
             b.draw(batch);
         }
-        player.draw(batch);
+        if (player != null) {
+            player.draw(batch);
+        }
+        for (HashMap.Entry<String, SprPlayer> entry : players.entrySet()) {
+            entry.getValue().draw(batch);
+        }
         for (SprEnemy e : arEnemies) {
             e.draw(batch);
         }

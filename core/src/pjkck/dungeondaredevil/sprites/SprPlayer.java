@@ -40,11 +40,10 @@ public class SprPlayer extends Sprite {
     private float fMaxHealth;
     private float fHealth;
 
-    public SprPlayer(float fX, float fY) {
+    public SprPlayer(float fX, float fY, Texture txSpritesheet) {
         super();
 
         // Create animation data from spritesheet
-        Texture txSpritesheet = new Texture("spritesheets/player.png");
         TextureRegion[][] tmp = TextureRegion.split(txSpritesheet, txSpritesheet.getWidth() / 4, txSpritesheet.getHeight() / 4);
 
         TextureRegion[] forwardFrames = new TextureRegion[4];
@@ -186,6 +185,10 @@ public class SprPlayer extends Sprite {
 
     public int getDir() {
         return nDir;
+    }
+
+    public STATE getState() {
+        return state;
     }
 
     public Gun getGun() {

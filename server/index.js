@@ -18,8 +18,10 @@ io.on('connection', (socket) => {
 
         for (let i = 0; i < players; i++) {
             if (players[i].id == data.id) {
-                players[i].x = x;
-                players[i].y = y;
+                players[i].x = data.x;
+                players[i].y = data.y;
+                players[i].dir = data.dir;
+                players[i].state = data.state;
             }
         }
     });
@@ -32,11 +34,13 @@ io.on('connection', (socket) => {
             }
         }
     });
-    players.push(new Player(socket.id, 0, 0));
+    players.push(new Player(socket.id, 0, 0, 0, 'STANDING'));
 });
 
-function Player(id, x, y) {
+function Player(id, x, y, dir, state) {
     this.id = id;
+    this.dir = dir;
     this.x = x;
     this.y = y;
+    this.state = state
 }

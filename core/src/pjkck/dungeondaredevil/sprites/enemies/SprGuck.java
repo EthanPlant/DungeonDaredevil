@@ -20,6 +20,7 @@ public class SprGuck extends SprEnemy {
     private Vector2 vVelocity = Vector2.Zero;
     private float fSpeed = 75;
     private float fAngle;
+    private Animation<TextureRegion>[] animation;
 
     public SprGuck(float fX, float fY, Array<SprBullet> arBullets) {
         super(fX, fY, arBullets);
@@ -28,20 +29,33 @@ public class SprGuck extends SprEnemy {
         fAttackCooldown = gun.getAttackSpeed();
 
         Texture txSpriteSheet = new Texture("spritesheets/guck.png");
-        TextureRegion[][] tmp = TextureRegion.split(txSpriteSheet, txSpriteSheet.getWidth() / 2, txSpriteSheet.getHeight());
+        TextureRegion[][] tmp = TextureRegion.split(txSpriteSheet, txSpriteSheet.getWidth() / 6, txSpriteSheet.getHeight());
 
-        TextureRegion[] arFrames = new TextureRegion[2];
+        TextureRegion[] arGreenframes = new TextureRegion[2];
         for (int i = 0; i < 2; i++) {
-            arFrames[i] = tmp[0][i];
+            arGreenframes[i] = tmp[0][i];
         }
 
-        animMovement = new Animation<TextureRegion>(1 / 5f, arFrames);
+        TextureRegion[] arYellowframes = new TextureRegion[2];
+        arYellowframes[0] = tmp[0][4];
+        arYellowframes[1] = tmp[0][5];
 
-        setRegion(animMovement.getKeyFrame(0));
+        TextureRegion[] arRedframes = new TextureRegion[2];
+        arRedframes[0] = tmp[0][2];
+        arRedframes[1] = tmp[0][3];
+
+        animation = new Animation[3];
+
+        animation[0] = new Animation<TextureRegion>(1 / 5f, arGreenframes);
+        animation[1] = new Animation<TextureRegion>(1 / 5f, arYellowframes);
+        animation[2] = new Animation<TextureRegion>(1 / 5f, arRedframes);
+
+        setRegion(animation[0].getKeyFrame(0));
 
         rectHitbox = new Rectangle(getX() + 5, getY(), 27, 15);
 
-        setHealth(1);
+        setHealth(30);
+        fMaxhealth = 30;
 
         fMoveCooldown = MathUtils.random();
         fMoveTime = fMoveCooldown;
@@ -70,7 +84,6 @@ public class SprGuck extends SprEnemy {
         }
     }
 
-
     @Override
     public void update(float delta) {
         move();
@@ -81,7 +94,13 @@ public class SprGuck extends SprEnemy {
             shoot();
             fAttackCooldown = 0;
         }
-        setRegion(animMovement.getKeyFrame(fElapsedTime, true));
+        if (getHealth() <= fMaxhealth / 3) {
+            setRegion(animation[2].getKeyFrame(fElapsedTime, true));
+        } else if (getHealth() <= fMaxhealth / 3 * 2) {
+            setRegion(animation[1].getKeyFrame(fElapsedTime, true));
+        } else {
+            setRegion(animation[0].getKeyFrame(fElapsedTime, true));
+        }
         rectHitbox.setPosition(getX() + 5, getY());
     }
 }

@@ -29,6 +29,7 @@ public abstract class SprEnemy extends Sprite {
     private Array<SprBullet> arBullets;
 
     private float fHealth;
+    protected float fMaxhealth;
 
     public SprEnemy(float fX, float fY, Array<SprBullet> arBullets) {
         super();

@@ -22,6 +22,7 @@ import pjkck.dungeondaredevil.sprites.SprBullet;
 import pjkck.dungeondaredevil.sprites.SprPlayer;
 import pjkck.dungeondaredevil.sprites.enemies.SprEnemy;
 import pjkck.dungeondaredevil.sprites.enemies.SprGuck;
+import pjkck.dungeondaredevil.sprites.enemies.SprSmiley;
 import pjkck.dungeondaredevil.ui.HealthBar;
 import pjkck.dungeondaredevil.utils.CollisionHandler;
 import pjkck.dungeondaredevil.utils.InputManager;
@@ -29,7 +30,7 @@ import pjkck.dungeondaredevil.utils.InputManager;
 public class ScrGame implements Screen {
     private SprPlayer player;
 
-    private Array<SprGuck> arEnemies;
+    private Array<SprEnemy> arEnemies;
 
     private GamDungeonDaredevil game;
 
@@ -67,13 +68,14 @@ public class ScrGame implements Screen {
         collisionHandler = new CollisionHandler(map);
 
         player = new SprPlayer(port.getWorldWidth() / 2, port.getWorldHeight() / 2);
-        arEnemies = new Array<SprGuck>();
+        arEnemies = new Array<SprEnemy>();
 
         arBullets = new Array<SprBullet>();
 
         // Spawn enemies
         for (int i = 0; i < 10; i++) {
             arEnemies.add(new SprGuck(MathUtils.random(64, 704), MathUtils.random(64, 672), arBullets));
+            arEnemies.add(new SprSmiley(MathUtils.random(64, 704), MathUtils.random(64, 672), arBullets));
         }
 
         // Set custom cursor
@@ -189,7 +191,7 @@ public class ScrGame implements Screen {
             }
 
             if (e.getHealth() <= 0) {
-                arEnemies.removeValue((SprGuck) e, true);
+                arEnemies.removeValue(e, true);
             }
         }
 
@@ -211,9 +213,6 @@ public class ScrGame implements Screen {
     @Override
     public void render(float delta) {
         update();
-
-       //Gdx.app.log("Delta Time", Float.toString(Gdx.graphics.getDeltaTime()));
-//        Gdx.app.log("DT", Float.toString(Gdx.graphics.getDeltaTime()));
 
         renderer.setView(cam);
 

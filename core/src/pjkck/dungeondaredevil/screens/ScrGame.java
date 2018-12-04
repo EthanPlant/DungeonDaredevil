@@ -83,11 +83,13 @@ public class ScrGame implements Screen {
         Gdx.graphics.setCursor(Gdx.graphics.newCursor(pm, 16, 16));
         pm.dispose();
 
+        // Set up UI
         stage = new Stage(new FitViewport(port.getWorldWidth(), port.getWorldHeight()));
         healthBar = new HealthBar(250, 20, player.getMaxHealth());
         healthBar.setPosition(10, stage.getViewport().getWorldHeight() - 30);
         stage.addActor(healthBar);
 
+        // Set up input processor
         inputManager = new InputManager();
         Gdx.input.setInputProcessor(inputManager);
     }
@@ -98,29 +100,20 @@ public class ScrGame implements Screen {
     }
 
     public void handleInput() {
-        player.setVelocity(Vector2.Zero);
+        player.setVelocity(Vector2.Zero); // Set player speed to zero
         // Get location of mouse cursor
         Vector3 vMousePos = new Vector3(inputManager.getMouseCoordinates(), 0);
         cam.unproject(vMousePos);
         player.setAngle(vMousePos);
 
-        if (inputManager.isKeyDown(Input.Keys.W) && inputManager.isKeyDown(Input.Keys.A)) {
-            player.move(7, 300);
-        } else if (inputManager.isKeyDown(Input.Keys.W) && inputManager.isKeyDown(Input.Keys.D)) {
-            player.move(1, 300);
-        } else if (inputManager.isKeyDown(Input.Keys.S) && inputManager.isKeyDown(Input.Keys.A)) {
-            player.move(5, 300);
-        } else if (inputManager.isKeyDown(Input.Keys.S) && inputManager.isKeyDown(Input.Keys.D)) {
-            player.move(3, 300);
-        } else if (inputManager.isKeyDown(Input.Keys.W)) {
-            player.move(0, 300);
-        } else if (inputManager.isKeyDown(Input.Keys.S)) {
-            player.move(4, 300);
-        } else if (inputManager.isKeyDown(Input.Keys.A)) {
-            player.move(6, 300);
-        } else if (inputManager.isKeyDown(Input.Keys.D)) {
-            player.move(2, 300);
-        }
+        if (inputManager.isKeyDown(Input.Keys.W)) player.move(0, 300);
+        else if (inputManager.isKeyDown(Input.Keys.W) && inputManager.isKeyDown(Input.Keys.D)) player.move(1, 300);
+        else if (inputManager.isKeyDown(Input.Keys.D)) player.move(2, 300);
+        else if (inputManager.isKeyDown(Input.Keys.D) && inputManager.isKeyDown(Input.Keys.S)) player.move(3, 300);
+        else if (inputManager.isKeyDown(Input.Keys.S)) player.move(4, 300);
+        else if (inputManager.isKeyDown(Input.Keys.S) && inputManager.isKeyDown(Input.Keys.A)) player.move(5, 300);
+        else if (inputManager.isKeyDown(Input.Keys.A)) player.move(6, 300);
+        else if (inputManager.isKeyDown(Input.Keys.A) && inputManager.isKeyDown(Input.Keys.W)) player.move(7, 300);
         if (inputManager.isKeyPressed(Input.Keys.SPACE)) {
             player.move(player.getDir(), 3000);
         }
@@ -220,6 +213,8 @@ public class ScrGame implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         renderer.render(); // Draw the map
+
+        //System.out.println(player.getX() + ", " + player.getY());
 
         // Draw the sprites
         batch.setProjectionMatrix(cam.combined);

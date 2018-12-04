@@ -40,6 +40,8 @@ public class SprPlayer extends Sprite {
     private float fMaxHealth;
     private float fHealth;
 
+    private Vector2[] vDirs;
+
     public SprPlayer(float fX, float fY) {
         super();
 
@@ -93,6 +95,17 @@ public class SprPlayer extends Sprite {
 
         vVelocity = Vector2.Zero;
 
+        vDirs = new Vector2[] {
+                new Vector2(0, 1),
+                new Vector2(1, 1),
+                new Vector2(1, 0),
+                new Vector2(1, -1),
+                new Vector2(0, -1),
+                new Vector2(-1, -1),
+                new Vector2(-1, 0),
+                new Vector2(-1, 1)
+        };
+
         // Create gun from JSON file
         Json json = new Json();
         gun = json.fromJson(Gun.class, Gdx.files.internal("json/revolver.json"));
@@ -111,32 +124,7 @@ public class SprPlayer extends Sprite {
 
     public void move(int nDirection, float fSpeed) {
         nDir = nDirection;
-        switch (nDirection) {
-            case 0:
-                vVelocity = (new Vector2(0, fSpeed));
-                break;
-            case 1:
-                vVelocity = (new Vector2(fSpeed, fSpeed));
-                break;
-            case 2:
-                vVelocity = (new Vector2(fSpeed, 0));
-                break;
-            case 3:
-                vVelocity = (new Vector2(fSpeed, -fSpeed));
-                break;
-            case 4:
-                vVelocity = (new Vector2(0, -fSpeed));
-                break;
-            case 5:
-                vVelocity = (new Vector2(-fSpeed, -fSpeed));
-                break;
-            case 6:
-                vVelocity = (new Vector2(-fSpeed, 0));
-                break;
-            case 7:
-                vVelocity = (new Vector2(-fSpeed, fSpeed));
-                break;
-        }
+        vVelocity = vDirs[nDir].nor().scl(fSpeed);
     }
 
     public void shoot(Vector3 vMousePos, Array<SprBullet> bullets) {
@@ -162,6 +150,23 @@ public class SprPlayer extends Sprite {
 
     public void setVelocity(Vector2 value) {
         vVelocity = value;
+    }
+
+    public void update(float delta) {
+        fElapsedTime += delta;
+        fAttackCooldown += delta;
+
+        if (vVelocity != Vector2.Zero) {
+            state = STATE.WALKING;
+        } else {
+            fElapsedTime = 0;
+            state = STATE.STANDING;
+        }
+
+        setImageBasedOnRotation(fAngle);
+
+        setPosition(getX() + vVelocity.x * Gdx.graphics.getDeltaTime(), getY() + vVelocity.y * Gdx.graphics.getDeltaTime());
+        rectHitbox.setPosition(getX() + 5, getY());
     }
 
     public void setVelocity(float x, float y) {
@@ -190,22 +195,5 @@ public class SprPlayer extends Sprite {
 
     public Gun getGun() {
         return gun;
-    }
-
-    public void update(float delta) {
-        fElapsedTime += delta;
-        fAttackCooldown += delta;
-
-        if (vVelocity != Vector2.Zero) {
-            state = STATE.WALKING;
-        } else {
-            fElapsedTime = 0;
-            state = STATE.STANDING;
-        }
-
-        setImageBasedOnRotation(fAngle);
-
-        setPosition(getX() + vVelocity.x * Gdx.graphics.getDeltaTime(), getY() + vVelocity.y * Gdx.graphics.getDeltaTime());
-        rectHitbox.setPosition(getX() + 5, getY());
     }
 }

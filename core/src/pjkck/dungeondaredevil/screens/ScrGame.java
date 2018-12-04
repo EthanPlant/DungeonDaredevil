@@ -132,25 +132,46 @@ public class ScrGame implements Screen {
 
         player.update(Gdx.graphics.getDeltaTime());
 
-        for (SprBullet b : arBullets) {
-            b.update(Gdx.graphics.getDeltaTime());
+        if (collisionHandler.isCollidingWithMap(player.getHitbox(), 2)) player.setPosition(fStartX, fStartY);
 
-            if (collisionHandler.findDistance(new Vector2(b.getX(), b.getY()), new Vector2(player.getX(), player.getY())) >= player.getGun().getRange()) {
-                arBullets.removeValue(b, true);
+        for (SprEnemy e : arEnemies) {
+            float fEStartX = e.getX();
+            float fEStartY = e.getY();
+
+            e.update(Gdx.graphics.getDeltaTime());
+
+            if (collisionHandler.isCollidingWithMap(e.getHitbox(), 2)) e.setPosition(fEStartX, fEStartY);
+
+            if (collisionHandler.findDistance(new Vector2(player.getX(), player.getY()), new Vector2(e.getX(), e.getY())) <= e.getRange()) {
+                e.setPlayerInRange(true);
+                e.setTargetPos(player.getX(), player.getY());
+            } else e.setPlayerInRange(false);
+
+            if (collisionHandler.isSpriteColliding(player.getHitbox(), e.getHitbox())) {
+                e.setPosition(fEStartX, fEStartY);
+                player.setPosition(fStartX, fStartY);
             }
 
-            if (collisionHandler.isCollidingWithMap(b.getBoundingRectangle(), 2)) {
-                arBullets.removeValue(b, true);
-            }
+            if (e.getHealth() <= 0) arEnemies.removeValue(e, true);
 
-            if (collisionHandler.isSpriteColliding(b.getBoundingRectangle(), player.getHitbox()) && b.getOrigin() != SprPlayer.class) {
-                arBullets.removeValue(b, true);
-                player.setHealth(-10);
-            }
+            for (SprBullet b : arBullets) {
+                b.update(Gdx.graphics.getDeltaTime());
 
-            for (SprEnemy e : arEnemies) {
-                if (b.getVelocity() == Vector2.Zero && b.getOrigin() != SprPlayer.class) {
+                if (b.getVelocity() == Vector2.Zero && b.getOrigin() != SprPlayer.class)
                     b.setTargetPos(player.getX(), player.getY(), e.getGun().getSpray());
+
+                if (collisionHandler.findDistance(new Vector2(b.getX(), b.getY()), new Vector2(player.getX(), player.getY())) >= player.getGun().getRange() ||
+                        collisionHandler.findDistance(new Vector2(b.getX(), b.getY()), new Vector2(e.getX(), e.getY())) >= e.getGun().getRange()) {
+                    arBullets.removeValue(b, true);
+                }
+
+                if (collisionHandler.isCollidingWithMap(b.getBoundingRectangle(), 2)) {
+                    arBullets.removeValue(b, true);
+                }
+
+                if (collisionHandler.isSpriteColliding(b.getBoundingRectangle(), player.getHitbox()) && b.getOrigin() != SprPlayer.class) {
+                    arBullets.removeValue(b, true);
+                    player.setHealth(-10);
                 }
 
                 if (collisionHandler.isSpriteColliding(b.getBoundingRectangle(), e.getHitbox()) && b.getOrigin() == SprPlayer.class) {
@@ -160,46 +181,11 @@ public class ScrGame implements Screen {
             }
         }
 
-        // Update enemy location and check for collisions
-        for (SprEnemy e : arEnemies) {
-            float fEStartX = e.getX();
-            float fEStartY = e.getY();
-
-            e.update(Gdx.graphics.getDeltaTime());
-            if (collisionHandler.isCollidingWithMap(e.getHitbox(), 2)) {
-                e.setPosition(fEStartX, fEStartY);
-            }
-
-            if (collisionHandler.findDistance(new Vector2(player.getX(), player.getY()), new Vector2(e.getX(), e.getY())) <= e.getRange()) {
-                e.setPlayerInRange(true);
-                e.setTargetPos(player.getX(), player.getY());
-            } else {
-                e.setPlayerInRange(false);
-            }
-
-            if (collisionHandler.isSpriteColliding(player.getHitbox(), e.getHitbox())) {
-                e.setPosition(fEStartX, fEStartY);
-
-                player.setPosition(fStartX, fStartY);
-            }
-
-            if (e.getHealth() <= 0) {
-                arEnemies.removeValue(e, true);
-            }
-        }
-
-        if (collisionHandler.isCollidingWithMap(player.getHitbox(), 2)) {
-            player.setPosition(fStartX, fStartY);
-        }
-
         healthBar.setValue(player.getHealth());
 
-        if (player.getHealth() <= 0) {
-            game.updateState(1);
-        }
+        if (player.getHealth() <= 0) game.updateState(1);
 
-        cam.position.set(player.getX() + player.getWidth() / 2, player.getY() + player.getHeight() / 2, 0); // Set camera location to player's
-
+        cam.position.set(player.getX() + player.getWidth() / 2, player.getY() + player.getHeight() / 2, 0);
         cam.update();
     }
 

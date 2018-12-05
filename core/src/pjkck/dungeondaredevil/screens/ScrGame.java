@@ -116,7 +116,7 @@ public class ScrGame implements Screen {
 
     public void connectSocket() {
         try {
-            socket = IO.socket("http://localhost:8080");
+            socket = IO.socket("https://dungeondaredevil-server.herokuapp.com/");
             socket.connect();
         } catch (URISyntaxException e) {
             Gdx.app.log("SocketIO", "Connection Error", e);

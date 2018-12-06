@@ -106,14 +106,14 @@ public class ScrGame implements Screen {
         cam.unproject(vMousePos);
         player.setAngle(vMousePos);
 
-        if (inputManager.isKeyDown(Input.Keys.W)) player.move(0, 300);
-        else if (inputManager.isKeyDown(Input.Keys.W) && inputManager.isKeyDown(Input.Keys.D)) player.move(1, 300);
-        else if (inputManager.isKeyDown(Input.Keys.D)) player.move(2, 300);
+        if (inputManager.isKeyDown(Input.Keys.W) && inputManager.isKeyDown(Input.Keys.D)) player.move(1, 300);
         else if (inputManager.isKeyDown(Input.Keys.D) && inputManager.isKeyDown(Input.Keys.S)) player.move(3, 300);
-        else if (inputManager.isKeyDown(Input.Keys.S)) player.move(4, 300);
         else if (inputManager.isKeyDown(Input.Keys.S) && inputManager.isKeyDown(Input.Keys.A)) player.move(5, 300);
-        else if (inputManager.isKeyDown(Input.Keys.A)) player.move(6, 300);
         else if (inputManager.isKeyDown(Input.Keys.A) && inputManager.isKeyDown(Input.Keys.W)) player.move(7, 300);
+        else if (inputManager.isKeyDown(Input.Keys.W)) player.move(0, 300);
+        else if (inputManager.isKeyDown(Input.Keys.D)) player.move(2, 300);
+        else if (inputManager.isKeyDown(Input.Keys.S)) player.move(4, 300);
+        else if (inputManager.isKeyDown(Input.Keys.A)) player.move(6, 300);
         if (inputManager.isKeyPressed(Input.Keys.SPACE)) {
             player.move(player.getDir(), 3000);
         }

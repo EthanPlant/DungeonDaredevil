@@ -3,6 +3,7 @@ package pjkck.dungeondaredevil.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -27,6 +28,8 @@ public class ScrMenu implements Screen {
     private Stage stage;
     private TextButton playButton;
 
+    private Music bgMusic;
+
     public ScrMenu(GamDungeonDaredevil game, SpriteBatch batch) {
         this.game = game;
         this.batch = batch;
@@ -45,6 +48,10 @@ public class ScrMenu implements Screen {
         Gdx.input.setInputProcessor(stage);
 
         txImg = new Texture("textures/titlescreen.png");
+
+        bgMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/titlescreen.wav"));
+        bgMusic.setLooping(true);
+        bgMusic.play();
     }
 
     @Override
@@ -69,6 +76,7 @@ public class ScrMenu implements Screen {
         stage.draw();
 
         if (playButton.isPressed() || Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            bgMusic.stop();
             game.updateState(2);
         }
     }

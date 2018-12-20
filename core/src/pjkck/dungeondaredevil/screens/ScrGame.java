@@ -114,9 +114,11 @@ public class ScrGame implements Screen {
         else if (inputManager.isKeyDown(Input.Keys.D)) player.move(2, 300);
         else if (inputManager.isKeyDown(Input.Keys.S)) player.move(4, 300);
         else if (inputManager.isKeyDown(Input.Keys.A)) player.move(6, 300);
+
         if (inputManager.isKeyPressed(Input.Keys.SPACE)) {
             player.move(player.getDir(), 3000);
         }
+
         if (inputManager.isMouseDown()) {
             player.shoot(vMousePos, arBullets);
         }
@@ -133,6 +135,19 @@ public class ScrGame implements Screen {
         player.update(Gdx.graphics.getDeltaTime());
 
         if (collisionHandler.isCollidingWithMap(player.getHitbox(), 2)) player.setPosition(fStartX, fStartY);
+
+        for (SprBullet b : arBullets) {
+            b.update(Gdx.graphics.getDeltaTime());
+
+            if (collisionHandler.isCollidingWithMap(b.getBoundingRectangle(), 2)) {
+                arBullets.removeValue(b, true);
+            }
+
+            if (collisionHandler.isSpriteColliding(b.getBoundingRectangle(), player.getHitbox()) && b.getOrigin() != SprPlayer.class) {
+                arBullets.removeValue(b, true);
+                player.setHealth(-10);
+            }
+        }
 
         for (SprEnemy e : arEnemies) {
             float fEStartX = e.getX();
@@ -155,23 +170,12 @@ public class ScrGame implements Screen {
             if (e.getHealth() <= 0) arEnemies.removeValue(e, true);
 
             for (SprBullet b : arBullets) {
-                b.update(Gdx.graphics.getDeltaTime());
-
                 if (b.getVelocity() == Vector2.Zero && b.getOrigin() != SprPlayer.class)
                     b.setTargetPos(player.getX(), player.getY(), e.getGun().getSpray());
 
                 if (collisionHandler.findDistance(new Vector2(b.getX(), b.getY()), new Vector2(player.getX(), player.getY())) >= player.getGun().getRange() ||
                         collisionHandler.findDistance(new Vector2(b.getX(), b.getY()), new Vector2(e.getX(), e.getY())) >= e.getGun().getRange()) {
                     arBullets.removeValue(b, true);
-                }
-
-                if (collisionHandler.isCollidingWithMap(b.getBoundingRectangle(), 2)) {
-                    arBullets.removeValue(b, true);
-                }
-
-                if (collisionHandler.isSpriteColliding(b.getBoundingRectangle(), player.getHitbox()) && b.getOrigin() != SprPlayer.class) {
-                    arBullets.removeValue(b, true);
-                    player.setHealth(-10);
                 }
 
                 if (collisionHandler.isSpriteColliding(b.getBoundingRectangle(), e.getHitbox()) && b.getOrigin() == SprPlayer.class) {

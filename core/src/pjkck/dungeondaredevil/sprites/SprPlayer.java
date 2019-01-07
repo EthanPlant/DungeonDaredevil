@@ -40,6 +40,8 @@ public class SprPlayer extends Sprite {
     private float fMaxHealth;
     private float fHealth;
 
+    private float fArmour;
+
     private Vector2[] vDirs;
 
     public SprPlayer(float fX, float fY) {
@@ -116,6 +118,8 @@ public class SprPlayer extends Sprite {
         rectHitbox = new Rectangle(getX() + 5, getY(), 27, 27);
 
         fHealth = fMaxHealth = 100;
+
+        fArmour = 10;
     }
 
     public void setAngle(Vector3 vMousePos) {
@@ -174,7 +178,7 @@ public class SprPlayer extends Sprite {
     }
 
     public void setHealth(float value) {
-        fHealth += value;
+        fHealth += value * (100 / (100 + fArmour));
     }
 
     public Rectangle getHitbox() {

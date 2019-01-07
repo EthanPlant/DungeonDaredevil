@@ -52,6 +52,8 @@ public class ScrGame implements Screen {
 
     private Array<SprBullet> arBullets;
 
+    public int gunswitch = 0;
+
     public ScrGame(GamDungeonDaredevil game, SpriteBatch batch) {
         this.game = game;
         this.batch = batch;
@@ -123,6 +125,20 @@ public class ScrGame implements Screen {
             player.shoot(vMousePos, arBullets);
         }
 
+        if (inputManager.isKeyPressed(Input.Keys.DOWN)){
+            if(gunswitch == 3) {
+                gunswitch = 0;
+            } else gunswitch++;
+            player.setgun(gunswitch);
+
+         } else if (inputManager.isKeyPressed(Input.Keys.UP)){
+            if(gunswitch == 0) {
+                gunswitch = 3;
+            } else gunswitch--;
+            player.setgun(gunswitch);
+
+}
+
         inputManager.update();
     }
 
@@ -130,6 +146,7 @@ public class ScrGame implements Screen {
         handleInput();
 
         float fStartX = player.getX();
+
         float fStartY = player.getY();
 
         player.update(Gdx.graphics.getDeltaTime());

@@ -22,6 +22,7 @@ public class SprPlayer extends Sprite {
     }
 
     private Animation<TextureRegion>[] arWalkingAnimations;
+
     private float fElapsedTime;
     private float fAttackCooldown;
 
@@ -41,6 +42,8 @@ public class SprPlayer extends Sprite {
     private float fHealth;
 
     private Vector2[] vDirs;
+
+    private Gun[] arGuns;
 
     public SprPlayer(float fX, float fY) {
         super();
@@ -108,7 +111,18 @@ public class SprPlayer extends Sprite {
 
         // Create gun from JSON file
         Json json = new Json();
-        gun = json.fromJson(Gun.class, Gdx.files.internal("json/revolver.json"));
+
+        arGuns = new Gun[]{
+                json.fromJson(Gun.class, Gdx.files.internal("json/revolver.json")),
+                json.fromJson(Gun.class, Gdx.files.internal("json/smg.json")),
+                json.fromJson(Gun.class, Gdx.files.internal("json/shotgun.json")),
+                json.fromJson(Gun.class, Gdx.files.internal("json/sword.json"))
+        };
+
+                gun = arGuns[0];
+
+
+
         fAttackCooldown = gun.getAttackSpeed();
 
         state = STATE.STANDING;
@@ -196,4 +210,8 @@ public class SprPlayer extends Sprite {
     public Gun getGun() {
         return gun;
     }
+
+    public void setgun(int gun) {this.gun = arGuns[gun];}
+
 }
+

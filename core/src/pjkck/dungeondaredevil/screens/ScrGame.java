@@ -121,6 +121,8 @@ public class ScrGame implements Screen {
             player.move(player.getDir(), 3000);
         }
 
+        if (inputManager.isKeyPressed(Input.Keys.ENTER)) throw new UnsupportedOperationException();
+
         if (inputManager.isMouseDown()) {
             player.shoot(vMousePos, arBullets);
         }
